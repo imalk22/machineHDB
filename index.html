@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kottu Cutting Machine - Professional Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #f8f9fa;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #ff6b6b;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            padding: 16px 50px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        /* ========== VIDEO MODAL ========== */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .video-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-container {
+            position: relative;
+            width: 90%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .close-video {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            z-index: 1001;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-video:hover {
+            background: rgba(255, 107, 107, 0.8);
+            transform: rotate(90deg);
+        }
+
+        /* ========== FLOATING CTA BUTTON ========== */
+        .floating-cta {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            pointer-events: none;
+            animation: popUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes popUp {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        .floating-cta.show {
+            pointer-events: auto;
+        }
+
+        .floating-cta button {
+            padding: 14px 40px;
+            font-size: 0.95rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s;
+            white-space: nowrap;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            }
+            50% {
+                box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+            }
+        }
+
+        .floating-cta button:hover {
+            transform: scale(1.05);
+        }
+
+        /* ========== PRODUCT DETAILS SECTION ========== */
+        .details-section {
+            background: #fff;
+            padding: 80px 20px;
+            scroll-behavior: smooth;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ========== FEATURES GRID ========== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto 80px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%);
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff6b6b;
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ========== SPECS SECTION ========== */
+        .specs-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            padding: 80px 20px;
+            border-radius: 20px;
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            box-shadow: 0 20px 60px rgba(255, 107, 107, 0.1);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .spec-item {
+            text-align: center;
+        }
+
+        .spec-item h4 {
+            font-size: 0.9rem;
+            color: #ff6b6b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .spec-item p {
+            font-size: 1.8rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* ========== BENEFITS SECTION ========== */
+        .benefits-section {
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+
+        .benefit-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .benefit-row:nth-child(even) {
+            direction: rtl;
+        }
+
+        .benefit-row:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .benefit-text h3 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .benefit-text p {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .benefit-list {
+            list-style: none;
+        }
+
+        .benefit-list li {
+            padding: 12px 0;
+            color: #555;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .benefit-list li::before {
+            content: '✓';
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .benefit-image {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border-radius: 15px;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            text-align: center;
+            padding: 20px;
+            font-weight: 600;
+        }
+
+        /* ========== TESTIMONIALS SECTION ========== */
+        .testimonials-section {
+            background: #f8f9fa;
+            padding: 80px 20px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.15);
+        }
+
+        .stars {
+            color: #ff6b6b;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-text {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .testimonial-role {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* ========== PRICING SECTION ========== */
+        .pricing-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%);
+            padding: 50px 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 2px solid #ff6b6b;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-box::before {
+            content: 'SPECIAL OFFER';
+            position: absolute;
+            top: 20px;
+            right: -35px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 50px;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .original-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .current-price {
+            font-size: 3.5rem;
+            color: #ff6b6b;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .currency {
+            font-size: 1.5rem;
+            vertical-align: super;
+        }
+
+        .price-description {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+        }
+
+        .includes-list {
+            text-align: left;
+            margin: 30px 0;
+            list-style: none;
+        }
+
+        .includes-list li {
+            padding: 10px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .includes-list li::before {
+            content: '✓';
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* ========== CTA SECTION ========== */
+        .final-cta-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .final-cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .final-cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #e0e0e0;
+        }
+
+        .cta-buttons-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 16px 50px;
+            font-size: 1.05rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 16px 50px;
+            font-size: 1.05rem;
+            background: transparent;
+            color: white;
+            border: 2px solid #ff6b6b;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #ff6b6b;
+            transform: translateY(-3px);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: #0f0f1e;
+            color: #999;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        footer p {
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: #ff6b6b;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .benefit-row {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .benefit-row:nth-child(even) {
+                direction: ltr;
+            }
+
+            .benefit-image {
+                height: 250px;
+            }
+
+            .specs-grid {
+                gap: 20px;
+            }
+
+            .cta-buttons-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== HERO SECTION ========== -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Professional Kottu Cutting Machine</h1>
+            <p class="hero-subtitle">වේගයෙන් කපන්න | ගුණমාන සහ ඉතිරිකරුණ</p>
+            <p class="hero-description">
+                ඔබගේ ව්‍යාපාරය ද්‍රුතවත් කරන්න සහ මාසයකට දීමනා වැඩි කරන්න. මේ පිටුවේ දිස්ටිමු වීඩියෝ බලා ඔබ කෝණිසි වුන නම් ඉතුරුව අතුරු ස්ථරවලින් අතිරේක විස්තර බලන්න.
+            </p>
+            <button class="cta-button" onclick="openVideoModal()">🎬 වීඩියෝ බලන්න</button>
+        </div>
+    </section>
+
+    <!-- ========== VIDEO MODAL ========== -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-container">
+            <span class="close-video" onclick="closeVideoModal()">&times;</span>
+            <video id="mainVideo" controls>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="floating-cta" id="floatingCTA">
+                <button onclick="handleCallNow()">📞 මිලදිගැනීමට අවශ්‍ය නම් දැන්ම අමතන්න</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== FEATURES SECTION ========== -->
+    <section class="details-section">
+        <div class="section-header">
+            <h2>ඇයි මේ යන්ත්‍රය විශේෂ?</h2>
+            <p>කොත්තු, fried rice සහ noodles වේගයෙන් කපන් සර්වෝත්තම විසඳුම</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>අතිවේගවත් කැපීම</h3>
+                <p>තත්පර විනාඩි තුනේ කෑල් දාහයි. ඔබගේ ඉපැයීම දෙගුණ කරන්න.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>ඒකාකාර තොගයි</h3>
+                <p>සෑම කෑල්ලම සමාන විශාලත්වයි. ගිණුමෙ සඳහා පරිපූර්ණ।</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💪</div>
+                <h3>ශක්තිමත් සම්පූර්ණ</h3>
+                <p>1.5HP ශක්තිය සහ 150 KG/h ධාරිතාවය - ශක්තිමත් යන්ත්‍රය.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>ස්තර 304 ස්ටේන්ලස්</h3>
+                <p>දිගු ආයුෂ්‍යය සහ තිරෙ වලට එරෙහි - සුරක්ෂිතයි.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>පහසු ශුද්ධතා</h3>
+                <p>සියලු කොටස අසරණවින් ඉවත් කර ගෙන හෝසල් දිවා සුස්තු කරන්න.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>ඉංජිනේරුවරුන් සහාය</h3>
+                <p>1 වසරේ භාරය සහ සිරි ලංකා පුරා ගෙවීම.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SPECS SECTION ========== -->
+    <section class="specs-section">
+        <div class="section-header">
+            <h2>තාක්ෂණික දත්ත</h2>
+        </div>
+
+        <div class="specs-grid">
+            <div class="spec-item">
+                <h4>⚙️ ශක්තිය</h4>
+                <p>1.5 HP</p>
+            </div>
+            <div class="spec-item">
+                <h4>📦 ධාරිතාව</h4>
+                <p>150 KG/h</p>
+            </div>
+            <div class="spec-item">
+                <h4>🔩 ස්ටලින්</h4>
+                <p>SS304</p>
+            </div>
+            <div class="spec-item">
+                <h4>🛡️ භාරය</h4>
+                <p>1 වසර</p>
+            </div>
+            <div class="spec-item">
+                <h4>🌍 නිර්මිතය</h4>
+                <p>ශ්‍රී ලංකා</p>
+            </div>
+            <div class="spec-item">
+                <h4>📊 සුදුසුතාවය</h4>
+                <p>සෝටෙල්, කෝටු</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BENEFITS SECTION ========== -->
+    <section class="details-section">
+        <div class="section-header">
+            <h2>ඔබ දරන්න ඔබ ලබන්න</h2>
+            <p>ඔබගේ ව්‍යාපාරය පිට වෙනසක් සිදු වෙයි</p>
+        </div>
+
+        <div class="benefit-row">
+            <div class="benefit-text">
+                <h3>🚀 වේගයෙන් නඩත්තු කරන්න</h3>
+                <p>තිරෙ දිනේ තුනේ (3) වරට දීමනා වැඩි කරන්න. ඔබගේ ගිණුමේ තුනේ (3) වරට වැඩිවෙයි।</p>
+                <ul class="benefit-list">
+                    <li>දීමනා දිනට 50 ➜ දිනට 150</li>
+                    <li>තිරෙ කරන්නගේ 2-3 ➜ එක්ගේ 1</li>
+                    <li>පැය 12 ➜ පැය 4 වැඩ</li>
+                </ul>
+            </div>
+            <div class="benefit-image">
+                📈 ඔබගේ දීමනා 3x වැඩිවෙයි
+            </div>
+        </div>
+
+        <div class="benefit-row">
+            <div class="benefit-text">
+                <h3>💰 ශ්‍රමිකයින්ගේ වියඩු අඩු කරන්න</h3>
+                <p>එක්ගේ 1 කමක් තිරෙ පුරා කරන්න පුළුවන්. සිරිපිටි ලිපිනේ 50% අඩු කරන්න.</p>
+                <ul class="benefit-list">
+                    <li>ශ්‍රමිකයින් 2 ➜ ශ්‍රමිකයින් 1</li>
+                    <li>නිල පිටි සම්පූර්ණ අඩු</li>
+                    <li>මාසයකට ලක්ෂ ගණන ඉතිරි</li>
+                </ul>
+            </div>
+            <div class="benefit-image">
+                💼 ශ්‍රමිකයින් අඩු = ලාභ වැඩි
+            </div>
+        </div>
+
+        <div class="benefit-row">
+            <div class="benefit-text">
+                <h3>⭐ ගුණයිතුරු ඉතිරිකරුණ</h3>
+                <p>සෑම කෑල්ලම සමාන විශාලත්වයි. ගිණුමෙ සඳහා නිවැරැදි විසඳුමයි.</p>
+                <ul class="benefit-list">
+                    <li>ඒකාකාර කෑල්ල - සෑම අවස්ථාවේ</li>
+                    <li>අසිරි වැඩ - ඉතිරිකරුණු ඉතිරි</li>
+                    <li>සතුටුවත් ගිණුම - නැවත දීමනා</li>
+                </ul>
+            </div>
+            <div class="benefit-image">
+                ✨ ගුණයිතුරු = ඉතිරිකරුණු
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TESTIMONIALS SECTION ========== -->
+    <section class="testimonials-section">
+        <div class="section-header">
+            <h2>ඉන්ගේ සිතුවිලි</h2>
+            <p>ශ්‍රී ලංකා පුරා භාවිතා කරන වෙළෙන්දන්ගේ අත්දැකීම</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">
+                    "ඒ යන්ත්‍රය එනිමතින් ඉතිරිකරුණු තිබුණ. දිනට දීමනා 30 සිට 100 වෙනවා. ශ්‍රමිකයින් එක්ගේ 1 දැන්. ලඟ දිනක උත්තර දිනිසමට සිරි ලංකා කි වෙනවා."
+                </p>
+                <p class="testimonial-author">කුරුණෑගල කෝටු කඩය</p>
+                <p class="testimonial-role">කුරුණෑගල, ශ්‍රී ලංකා</p>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">
+                    "අපි සිතුවෙ සිටිපුවෙ එම්බ වසර 2 ක්. අතුරු පහසුයි. නැතිවුනොත් අපිට ශ්‍රමිකයින් පහ දෙනාට සරු බැරි කරන්නයි."
+                </p>
+                <p class="testimonial-author">කොලඹ විශාල සෝටෙල්</p>
+                <p class="testimonial-role">කොලඹ 6, ශ්‍රී ලංකා</p>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">
+                    "එක දිනක සිතුවෙ ගිණුම ගිණුම සිතුවෙ. යම්දු වරකට නිල ලිපිනේ ඒ තැනටම ඉතිරිකරුණු ඉතිරිවෙයි."
+                </p>
+                <p class="testimonial-author">ගාල්ල ඉතිරිකරුණු ගමණ</p>
+                <p class="testimonial-role">ගාල්ල, ශ්‍රී ලංකා</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PRICING SECTION ========== -->
+    <section class="pricing-section">
+        <div class="section-header">
+            <h2>විශේෂ මිල අරුණ</h2>
+            <p>අසීමිත කලීන - සීමිත දීමනා!</p>
+        </div>
+
+        <div class="price-box">
+            <div class="original-price"><span class="currency">රු.</span> 124,375.00</div>
+            <div class="current-price"><span class="currency">රු.</span> 99,500.00</div>
+            <p class="price-description">සිරි ලංකා පුරා ගෙවීම ඉතුරු</p>
+
+            <ul class="includes-list">
+                <li>1.5HP ශක්තිමත් යන්ත්‍රය</li>
+                <li>SS304 ස්තර ස්ටේන්ලස්</li>
+                <li>1 වසරේ සිරි ඉන්ජිනේරුවරුන් භාරය</li>
+                <li>සිරි ලංකා ගෙවීම</li>
+                <li>තිරෙ සිරිපිටි සහාය</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ========== FINAL CTA SECTION ========== -->
+    <section class="final-cta-section">
+        <h2>තිබුණ අවස්ථා අතුරු - ක්‍ෂණිකයි!</h2>
+        <p>අපිට ඉතිරිවුනේ යන්ත්‍රය 3කි පමණ - දැන්ම සම්බන්ධ වන්න</p>
+
+        <div class="cta-buttons-group">
+            <button class="btn-primary" onclick="handleCallNow()">📞 දැන්ම අමතන්න</button>
+            <button class="btn-secondary" onclick="handleWhatsApp()">💬 WhatsApp පිටින් අසන්න</button>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <p><strong>HDB ENGINEERING LANKA (PVT) LTD</strong></p>
+        <p>📍 No. 218, Kurunegala Road, Dambulla, Sri Lanka</p>
+        <p>📞 076 0 360 560 | 076 0 450 451</p>
+        <p>📧 hdbengineeringlanka@gmail.com</p>
+
+        <div class="social-links">
+            <a href="#" target="_blank">Facebook</a>
+            <a href="#" target="_blank">YouTube</a>
+            <a href="#" target="_blank">TikTok</a>
+            <a href="#" target="_blank">Instagram</a>
+        </div>
+
+        <p style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
+            © 2026 HDB Engineering Lanka. සියලු අයිතිවාසිකම් ඉවත් කර ගනු ලැබේ.
+        </p>
+    </footer>
+
+    <script>
+        const videoModal = document.getElementById('videoModal');
+        const mainVideo = document.getElementById('mainVideo');
+        const floatingCTA = document.getElementById('floatingCTA');
+
+        // Open video modal
+        function openVideoModal() {
+            videoModal.classList.add('active');
+            // Set your video URL here
+            mainVideo.src = 'YOUR_VIDEO_URL_HERE';
+            mainVideo.play();
+
+            // Show CTA button at 50% of video
+            mainVideo.addEventListener('timeupdate', showCTAAtHalfway);
+        }
+
+        // Close video modal
+        function closeVideoModal() {
+            videoModal.classList.remove('active');
+            mainVideo.pause();
+            mainVideo.currentTime = 0;
+            floatingCTA.classList.remove('show');
+            mainVideo.removeEventListener('timeupdate', showCTAAtHalfway);
+        }
+
+        // Show CTA button at halfway point
+        function showCTAAtHalfway() {
+            const duration = mainVideo.duration;
+            const currentTime = mainVideo.currentTime;
+            const midpoint = duration / 2;
+
+            if (currentTime >= midpoint && !floatingCTA.classList.contains('show')) {
+                floatingCTA.classList.add('show');
+            }
+        }
+
+        // Handle call now button
+        function handleCallNow() {
+            window.location.href = 'tel:+94760360560';
+        }
+
+        // Handle WhatsApp button
+        function handleWhatsApp() {
+            const message = encodeURIComponent('Hello, I am interested in the Kottu Cutting Machine. Please send me more details.');
+            window.location.href = `https://wa.me/94760360560?text=${message}`;
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === videoModal) {
+                closeVideoModal();
+            }
+        });
+
+        // Smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
