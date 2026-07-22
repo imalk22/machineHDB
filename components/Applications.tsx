@@ -1,6 +1,4 @@
-'use client'
-
-import { motion } from 'framer-motion'
+import Reveal from './Reveal'
 
 const applications = [
   {
@@ -31,47 +29,26 @@ const applications = [
 
 export default function Applications() {
   return (
-    <section className="py-16 px-4 bg-white overflow-hidden">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          className="text-center mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <span className="inline-block bg-orange/10 text-orange text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 border border-orange/15">
+    <section className="py-16 bg-charcoal overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4">
+        <Reveal className="text-center mb-10">
+          <span className="inline-block bg-flame/10 text-flame-amber text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 border border-flame/20">
             Applications
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy">What Can You Make?</h2>
-          <p className="text-gray-400 mt-2 text-sm">මෙම යන්ත්‍රය භාවිත කළ හැකි ක්ෂේත්‍ර</p>
-        </motion.div>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+            මෙම යන්ත්‍රය භාවිත කළ හැකි ක්ෂේත්‍ර
+          </h2>
+        </Reveal>
+      </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-          {applications.map((app, index) => (
-            <motion.div
-              key={app.label}
-              className="group relative bg-white rounded-3xl p-5 sm:p-6 text-center shadow-sm border border-gray-100 hover:border-orange/30 hover:shadow-[0_16px_40px_rgba(249,115,22,0.15)] transition-shadow duration-300 overflow-hidden"
-              initial={{ opacity: 0, y: 30, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              whileHover={{ y: -8, scale: 1.05 }}
-              transition={{ delay: index * 0.1, type: 'spring', stiffness: 220, damping: 20 }}
-              viewport={{ once: true }}
-            >
-              {/* glow that blooms in on hover */}
-              <motion.div
-                className="pointer-events-none absolute -inset-6 rounded-full bg-orange/15 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                aria-hidden
-              />
+      {/* Horizontal snap-scroll row - bleeds to the edges on mobile */}
+      <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {applications.map((app, index) => (
+          <Reveal key={app.label} delayMs={index * 100} className="snap-center flex-shrink-0 w-[62vw] max-w-[240px]">
+            <div className="group relative h-full bg-white/5 rounded-3xl p-6 text-center border border-white/10 hover:border-flame/40 transition-colors duration-300 overflow-hidden">
+              <div className="pointer-events-none absolute -inset-6 rounded-full bg-flame/15 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden />
 
-              <motion.div
-                className="relative mx-auto mb-3 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-navy flex items-center justify-center shadow-md shadow-blue-900/25"
-                initial={{ scale: 0, rotate: -20 }}
-                whileInView={{ scale: 1, rotate: 0 }}
-                whileHover={{ scale: 1.1, rotate: -6 }}
-                transition={{ delay: index * 0.1 + 0.15, type: 'spring', stiffness: 300, damping: 14 }}
-                viewport={{ once: true }}
-              >
+              <div className="relative mx-auto mb-3 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-flame to-flame-amber flex items-center justify-center shadow-md shadow-flame/25">
                 <svg
                   className="w-7 h-7 sm:w-8 sm:h-8 text-white"
                   viewBox="0 0 24 24"
@@ -83,12 +60,14 @@ export default function Applications() {
                 >
                   {app.icon}
                 </svg>
-              </motion.div>
+              </div>
 
-              <p className="relative text-gray-700 text-sm font-semibold leading-snug">{app.label}</p>
-            </motion.div>
-          ))}
-        </div>
+              <p className="relative text-gray-200 text-sm font-semibold leading-snug">{app.label}</p>
+            </div>
+          </Reveal>
+        ))}
+        {/* Trailing spacer so the last card can reach center on snap */}
+        <div className="flex-shrink-0 w-[1px]" aria-hidden />
       </div>
     </section>
   )

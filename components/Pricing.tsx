@@ -32,7 +32,7 @@ export default function Pricing() {
             />
           </div>
 
-          <span className="inline-block text-electric text-xs font-bold tracking-[0.2em] uppercase mb-3">
+          <span className="inline-block text-electric text-xs font-bold mb-3">
             විශේෂ ප්‍රී-ඕඩර් මිල
           </span>
 
@@ -41,14 +41,14 @@ export default function Pricing() {
           </h3>
 
           <div className="mb-6">
-            <p className="text-white/40 text-sm line-through mb-1">රු. 124,375</p>
-            <p className="text-4xl sm:text-5xl font-extrabold text-orange leading-none mb-2">🔥 රු. 99,500</p>
+            <p className="text-white/40 text-base sm:text-lg line-through mb-1">රු. 99,500</p>
+            <p className="text-4xl sm:text-5xl font-extrabold text-orange leading-none mb-2">🔥 රු. 89,550</p>
             <motion.span
               className="inline-block bg-whatsapp text-white text-sm font-bold px-4 py-1.5 rounded-full"
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
             >
-              රු. 24,875 ඉතිරි කරගන්න
+              10% — රු. 9,950 ඉතිරි කරගන්න
             </motion.span>
           </div>
 

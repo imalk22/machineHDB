@@ -10,11 +10,23 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #0b1f3a;
 }
 
 body {
-  font-family: var(--font-noto-sinhala), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
+  /* Same stack as https://hdbeng.netlify.app/ — Noto Sans Sinhala for Unicode Sinhala */
+  font-family: var(--font-noto-sinhala), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
+}
+
+.font-english {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+}
+
+.btn-english {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  font-weight: 700;
 }
 
 /* Custom Scrollbar */
@@ -35,7 +47,6 @@ body {
   background: #ee5a6f;
 }
 
-/* Footer marquee ticker */
 .marquee-track {
   width: max-content;
   display: flex;
@@ -55,7 +66,6 @@ body {
   }
 }
 
-/* Video scrub bar - thin, draggable timeline over the hero video */
 .video-scrubber {
   -webkit-appearance: none;
   appearance: none;
@@ -97,4 +107,33 @@ body {
 .video-scrubber:hover::-moz-range-thumb,
 .video-scrubber:active::-moz-range-thumb {
   opacity: 1;
+}
+
+.gradient-text-flame {
+  background: linear-gradient(90deg, #ff6b1a, #ffb300, #ff6b1a);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ticker-text {
+  color: #ffb300;
+}
+@supports (-webkit-text-stroke: 1px) {
+  .ticker-text {
+    color: transparent;
+    -webkit-text-stroke: 1px #ffb300;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

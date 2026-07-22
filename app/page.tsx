@@ -1,24 +1,41 @@
 'use client'
 
 import VideoModal from '@/components/VideoModal'
-import Specs from '@/components/Specs'
-import Applications from '@/components/Applications'
-import FAQ from '@/components/FAQ'
-import WhyChoose from '@/components/WhyChoose'
-import Pricing from '@/components/Pricing'
+import SpecsSection from '@/components/funnel/SpecsSection'
+import StatsSection from '@/components/funnel/StatsSection'
+import FAQSection from '@/components/funnel/FAQSection'
+import YoutubeDemoSection from '@/components/funnel/YoutubeDemoSection'
+import KottuMachine from '@/components/funnel/KottuMachine'
+import WhyChooseUs from '@/components/funnel/WhyChooseUs'
+import SocialProof from '@/components/funnel/SocialProof'
+import FeedbackVideoSection from '@/components/funnel/FeedbackVideoSection'
+import HowItWorks from '@/components/funnel/HowItWorks'
+import ContactSection from '@/components/funnel/ContactSection'
+import StickyCTABar from '@/components/StickyCTABar'
+import FloatingCallButton from '@/components/funnel/FloatingCallButton'
+import BlueprintPattern from '@/components/BlueprintPattern'
 
 export default function Home() {
   return (
-    <main className="overflow-hidden">
-      {/* Auto-playing video with pricing overlay */}
-      <VideoModal isOpen={true} onClose={() => {}} autoPlay={true} />
+    <main className="relative min-h-screen overflow-x-hidden bg-navy">
+      <BlueprintPattern fixed />
 
-      {/* Product details sections */}
-      <Specs />
-      <Applications />
-      <Pricing />
-      <FAQ />
-      <WhyChoose />
+      <div className="relative z-10">
+        <VideoModal isOpen={true} onClose={() => {}} autoPlay={true} />
+        <SpecsSection />
+        <KottuMachine />
+        <WhyChooseUs />
+        <YoutubeDemoSection />
+        <FAQSection />
+        <SocialProof />
+        <FeedbackVideoSection />
+        <StatsSection />
+        <HowItWorks />
+        <ContactSection />
+      </div>
+
+      <FloatingCallButton />
+      <StickyCTABar />
     </main>
   )
 }

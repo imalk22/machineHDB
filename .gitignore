@@ -49,3 +49,6 @@ logs
 # Claude Code / tooling internals
 .claude
 .superpowers
+
+# Original uncompressed video backup (not deployed)
+/video-backups

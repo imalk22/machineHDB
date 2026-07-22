@@ -1,23 +1,29 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { Wrench, ShieldCheck, Check } from 'lucide-react'
+import Reveal from './Reveal'
+import { useInView } from '@/hooks/useInView'
+import { useCountUp } from '@/hooks/useCountUp'
 
-const specs = [
-  { label: 'Power', value: '1.5 HP (1500W)' },
-  { label: 'Capacity', value: '150 kg/hour' },
+const counterSpecs = [
+  { label: 'Power', target: 1.5, decimals: 1, suffix: ' HP' },
+  { label: 'Capacity', target: 150, decimals: 0, suffix: ' kg/hr' },
+  { label: 'Warranty', target: 12, decimals: 0, suffix: ' mo' },
+]
+
+const plainSpecs = [
   { label: 'Material', value: 'SS304 Stainless Steel' },
-  { label: 'Warranty', value: '1 Year (Parts & Service)' },
   { label: 'Origin', value: 'Made in Sri Lanka' },
 ]
 
 const features = [
   {
-    en: 'Rapid slicing for kottu and noodles',
-    si: 'කොත්තු සහ නූඩ්ල්ස් සඳහා වේගවත් කැපීම',
+    en: 'Rapid slicing for kottu',
+    si: 'කොත්තු රොටී වේගවත්ව කපාගත හැක',
   },
   {
     en: 'Cuts meat, cheese, and vegetables uniformly',
-    si: 'මස්, චීස් සහ එළවලු සමාන ලෙස කපයි',
+    si: 'මස්, චීස් සහ එළවලු සමාන ලෙස කපාගත හැක',
   },
   {
     en: 'Single operator needed',
@@ -28,114 +34,93 @@ const features = [
     si: 'SS304 වාණිජ ශ්‍රේණියේ මල නොබැඳෙන වානේ',
   },
   {
-    en: 'Free island-wide delivery and installation',
-    si: 'දිවයින පුරා නොමිලේ බෙදාහැරීම සහ ස්ථාපනය',
+    en: 'island-wide delivery',
+    si: 'දිවයින පුරා බෙදාහැරීම',
   },
 ]
 
+function CounterCard({ label, target, decimals, suffix }: (typeof counterSpecs)[number]) {
+  const { ref, isInView } = useInView<HTMLDivElement>()
+  const value = useCountUp(target, isInView)
+
+  return (
+    <div
+      ref={ref}
+      className="rounded-2xl bg-white/5 border border-flame/20 p-4 text-center shadow-[0_0_24px_rgba(255,107,26,0.08)]"
+    >
+      <p className="text-2xl sm:text-3xl font-black gradient-text-flame leading-none mb-1">
+        {value.toFixed(decimals)}
+        {suffix}
+      </p>
+      <p className="text-gray-400 text-xs font-semibold uppercase tracking-wide">{label}</p>
+    </div>
+  )
+}
+
 export default function Specs() {
   return (
-    <section id="specs" className="bg-white py-16 px-4">
+    <section id="specs" className="bg-charcoal py-16 px-4">
       <div className="max-w-5xl mx-auto">
-        <motion.div
-          className="text-center mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <span className="inline-block bg-navy/10 text-navy text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">
-            🔩 Technical Specifications
+        <Reveal className="text-center mb-10">
+          <span className="inline-flex items-center gap-1.5 bg-flame/10 text-flame-amber text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">
+            <Wrench className="w-3.5 h-3.5" aria-hidden />
+            Technical Specifications
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-navy leading-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
             තාක්ෂණික විස්තර සහ වගකිම් සහතිකය
           </h2>
-        </motion.div>
+        </Reveal>
+
+        {/* Count-up spec cards */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6">
+          {counterSpecs.map((spec) => (
+            <CounterCard key={spec.label} {...spec} />
+          ))}
+        </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Spec table */}
-          <motion.div
-            className="lg:col-span-2 overflow-hidden rounded-2xl border border-gray-200 shadow-sm"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <table className="w-full text-sm">
-              <tbody>
-                {specs.map((spec, index) => (
-                  <tr key={spec.label} className={index % 2 === 0 ? 'bg-ice' : 'bg-white'}>
-                    <td className="px-4 py-3 text-gray-600 text-xs w-1/2 border-r border-gray-200">{spec.label}</td>
-                    <td className="px-4 py-3 text-navy font-semibold text-xs">{spec.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </motion.div>
-
-          {/* Warranty + key features */}
+          {/* Plain specs + warranty badge */}
           <div className="flex flex-col gap-4">
-            <motion.div
-              className="bg-whatsapp/10 border border-whatsapp/30 rounded-2xl p-4 flex items-center gap-3"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <div className="bg-whatsapp text-white rounded-full w-12 h-12 flex flex-col items-center justify-center text-center flex-shrink-0">
-                <span className="font-extrabold text-lg leading-none">1</span>
-                <span className="text-xs leading-none">Year</span>
+            <Reveal className="overflow-hidden rounded-2xl border border-white/10">
+              {plainSpecs.map((spec, index) => (
+                <div
+                  key={spec.label}
+                  className={`flex items-center justify-between px-4 py-3 text-sm ${
+                    index % 2 === 0 ? 'bg-white/5' : 'bg-transparent'
+                  }`}
+                >
+                  <span className="text-gray-400 text-xs">{spec.label}</span>
+                  <span className="text-white font-semibold text-xs">{spec.value}</span>
+                </div>
+              ))}
+            </Reveal>
+
+            <Reveal delayMs={100} className="bg-whatsapp/10 border border-whatsapp/30 rounded-2xl p-4 flex items-center gap-3">
+              <div className="bg-whatsapp text-white rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
+                <ShieldCheck className="w-6 h-6" aria-hidden />
               </div>
               <div>
-                <p className="font-bold text-navy text-sm">යන්ත්‍රයේ බඳ සඳහා වගකීම</p>
-                <p className="text-xs text-gray-500">Machine Warranty (Parts &amp; Service)</p>
+                <p className="font-bold text-white text-sm">යන්ත්‍රයේ බඳ සඳහා වගකීම</p>
+                <p className="text-xs text-gray-400">Machine Warranty (Parts &amp; Service)</p>
               </div>
-            </motion.div>
+            </Reveal>
+          </div>
 
-            <div className="space-y-2.5">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.en}
-                  className="group relative flex items-center gap-3 bg-ice hover:bg-emerald-50 border border-transparent hover:border-emerald-200 rounded-xl p-3 overflow-hidden transition-colors duration-300"
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30, scale: 0.92 }}
-                  whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                  whileHover={{ y: -3, scale: 1.02 }}
-                  transition={{ delay: 0.15 + index * 0.12, type: 'spring', stiffness: 260, damping: 20 }}
-                  viewport={{ once: true }}
-                >
-                  {/* one-shot shine sweep as the card lands */}
-                  <motion.div
-                    className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12"
-                    initial={{ x: '-40%' }}
-                    whileInView={{ x: '450%' }}
-                    transition={{ delay: 0.15 + index * 0.12 + 0.35, duration: 0.7, ease: 'easeOut' }}
-                    viewport={{ once: true }}
-                  />
-
-                  <motion.div
-                    className="relative flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center shadow-md shadow-green-700/20 group-hover:scale-110 transition-transform duration-300"
-                    initial={{ scale: 0, rotate: -120 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    transition={{ delay: 0.15 + index * 0.12 + 0.1, type: 'spring', stiffness: 320, damping: 14 }}
-                    viewport={{ once: true }}
-                  >
-                    <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
-                      <motion.path
-                        d="M5 13l4 4L19 7"
-                        initial={{ pathLength: 0 }}
-                        whileInView={{ pathLength: 1 }}
-                        transition={{ delay: 0.15 + index * 0.12 + 0.35, duration: 0.35, ease: 'easeOut' }}
-                        viewport={{ once: true }}
-                      />
-                    </svg>
-                  </motion.div>
-                  <div className="relative">
-                    <p className="text-navy text-xs font-semibold leading-snug">{feature.si}</p>
-                    <p className="text-gray-500 text-[11px] leading-snug mt-0.5">{feature.en}</p>
+          {/* Key features */}
+          <div className="lg:col-span-2 space-y-2.5">
+            {features.map((feature, index) => (
+              <Reveal key={feature.en} delayMs={index * 80}>
+                <div className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-transparent hover:border-flame/30 rounded-xl p-3 transition-colors duration-300">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center shadow-md shadow-green-700/20">
+                    <Check className="w-4 h-4 text-white" strokeWidth={3} aria-hidden />
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                  <div>
+                    <p className="text-white text-sm font-semibold leading-snug">{feature.si}</p>
+                    <p className="text-gray-400 text-xs leading-snug mt-0.5">{feature.en}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </div>
