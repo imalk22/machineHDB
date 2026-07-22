@@ -12,7 +12,7 @@ const notoSansSinhala = Noto_Sans_Sinhala({
   display: 'swap',
 })
 
-const GA_ID = 'G-WS14CDJK01'
+const GA_ID = 'G-2YVGT3DXXP'
 const META_PIXEL_ID = '2918076888326024'
 
 const metadataBase = new URL('https://kottucuttingmachine.lk')
