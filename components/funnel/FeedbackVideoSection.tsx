@@ -5,7 +5,6 @@ import Reveal from '@/components/Reveal'
 import {
   setActiveVideo,
   onActiveVideoChange,
-  hasUserInteracted,
   markUserInteracted,
   onUserInteracted,
 } from '@/lib/videoPlayback'
@@ -16,31 +15,21 @@ export default function FeedbackVideoSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const inViewRef = useRef(false)
-  const [isMuted, setIsMuted] = useState(true)
 
   useEffect(() => {
     const section = sectionRef.current
     const video = videoRef.current
     if (!section || !video) return
 
-    const applySound = () => {
-      if (!hasUserInteracted()) return
+    video.muted = false
+    video.volume = 1
+
+    const play = () => {
+      setActiveVideo('feedback')
       video.muted = false
       video.volume = 1
-      setIsMuted(false)
-    }
-
-    const playWithSound = () => {
-      setActiveVideo('feedback')
-      applySound()
-      if (!hasUserInteracted()) {
-        video.muted = true
-        setIsMuted(true)
-      }
       void video.play().catch(() => {
-        video.muted = true
-        setIsMuted(true)
-        void video.play().catch(() => {})
+        // Browser blocked until a gesture — retry on next tap (no mute fallback)
       })
     }
 
@@ -52,7 +41,7 @@ export default function FeedbackVideoSection() {
       ([entry]) => {
         const visible = entry.isIntersecting && entry.intersectionRatio >= 0.4
         inViewRef.current = visible
-        if (visible) playWithSound()
+        if (visible) play()
         else pause()
       },
       { threshold: [0, 0.4, 0.7] }
@@ -65,8 +54,7 @@ export default function FeedbackVideoSection() {
     })
 
     const stopUnlock = onUserInteracted(() => {
-      applySound()
-      if (inViewRef.current) playWithSound()
+      if (inViewRef.current) play()
     })
 
     return () => {
@@ -75,17 +63,6 @@ export default function FeedbackVideoSection() {
       stopUnlock()
     }
   }, [])
-
-  const enableSound = () => {
-    markUserInteracted()
-    const video = videoRef.current
-    if (!video) return
-    video.muted = false
-    video.volume = 1
-    setIsMuted(false)
-    setActiveVideo('feedback')
-    void video.play().catch(() => {})
-  }
 
   return (
     <section ref={sectionRef} className="relative bg-transparent px-4 py-8 sm:py-10">
@@ -110,19 +87,10 @@ export default function FeedbackVideoSection() {
                 loop
                 preload="metadata"
                 controls
-                muted={isMuted}
+                muted={false}
                 aria-label="Customer feedback video"
-                onClick={enableSound}
+                onPlay={() => markUserInteracted()}
               />
-              {isMuted && (
-                <button
-                  type="button"
-                  onClick={enableSound}
-                  className="absolute bottom-14 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/25 bg-black/70 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-sm"
-                >
-                  🔊 Tap for sound
-                </button>
-              )}
             </div>
           </div>
         </Reveal>

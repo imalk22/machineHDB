@@ -6,7 +6,6 @@ import {
   setActiveVideo,
   onActiveVideoChange,
   markUserInteracted,
-  hasUserInteracted,
   onUserInteracted,
 } from '@/lib/videoPlayback'
 
@@ -65,16 +64,17 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   const [isVideoReady, setIsVideoReady] = useState(false)
   const [videoError, setVideoError] = useState(false)
   const [isPlaying, setIsPlaying] = useState(autoPlay)
-  const [isMuted, setIsMuted] = useState(true)
+  const inViewRef = useRef(false)
 
-  const enableSound = () => {
+  const playWithSound = () => {
     const video = videoRef.current
     if (!video) return
-    markUserInteracted()
     video.muted = false
     video.volume = 1
-    setIsMuted(false)
-    if (video.paused) video.play().catch(() => {})
+    setActiveVideo('hero')
+    void video.play().catch(() => {
+      // No mute fallback — retry after next user gesture via onUserInteracted
+    })
   }
 
   // Mark ready from readyState / events. After React remounts (Strict Mode /
@@ -111,35 +111,19 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     const video = videoRef.current
     if (!isOpen || !video || !autoPlay) return
 
-    // Start muted (browser policy), then unmute as soon as any page tap happens.
-    const wantSound = hasUserInteracted()
-    video.muted = !wantSound
-    setIsMuted(!wantSound)
-    if (wantSound) video.volume = 1
-    setActiveVideo('hero')
-    const tryPlay = () => {
-      video.play().catch(() => {
-        video.muted = true
-        setIsMuted(true)
-        video.play().catch(() => {})
-      })
-    }
-    tryPlay()
-    const t = window.setTimeout(tryPlay, 400)
+    video.muted = false
+    video.volume = 1
+    playWithSound()
+    const t = window.setTimeout(playWithSound, 400)
     return () => window.clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, autoPlay])
 
-  // Unmute the moment the visitor taps anywhere (or already has).
   useEffect(() => {
     return onUserInteracted(() => {
-      const video = videoRef.current
-      if (!video) return
-      video.muted = false
-      video.volume = 1
-      setIsMuted(false)
-      if (!video.paused) return
-      // Don't force-play if scrolled away — intersection handler owns that
+      if (inViewRef.current) playWithSound()
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Pause when scrolled away; resume with sound when back in view.
@@ -151,15 +135,11 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
-          setActiveVideo('hero')
-          if (hasUserInteracted()) {
-            video.muted = false
-            video.volume = 1
-            setIsMuted(false)
-          }
-          video.play().catch(() => {})
+          inViewRef.current = true
+          playWithSound()
           setIsPlaying(true)
         } else {
+          inViewRef.current = false
           video.pause()
           setIsPlaying(false)
         }
@@ -169,6 +149,7 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
 
     observer.observe(section)
     return () => observer.disconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   // Pause if another section claims playback.
@@ -210,10 +191,11 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   const togglePlay = () => {
     const video = videoRef.current
     if (!video) return
-    enableSound()
+    markUserInteracted()
+    video.muted = false
+    video.volume = 1
     if (video.paused) {
-      setActiveVideo('hero')
-      video.play().catch(() => {})
+      playWithSound()
     } else {
       video.pause()
     }
@@ -242,11 +224,14 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             loop
             preload="auto"
             playsInline
-            muted={isMuted}
+            muted={false}
             onCanPlay={() => setIsVideoReady(true)}
             onLoadedData={() => setIsVideoReady(true)}
             onPlaying={() => setIsVideoReady(true)}
-            onPlay={() => setIsPlaying(true)}
+            onPlay={() => {
+              setIsPlaying(true)
+              markUserInteracted()
+            }}
             onPause={() => setIsPlaying(false)}
             onError={() => {
               setVideoError(true)
@@ -254,17 +239,6 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             }}
             onClick={togglePlay}
           />
-
-          {/* Tap prompt — phones block sound until a gesture */}
-          {isMuted && isVideoReady && (
-            <button
-              type="button"
-              onClick={enableSound}
-              className="absolute bottom-16 left-1/2 z-30 -translate-x-1/2 rounded-full border border-white/25 bg-black/70 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-sm"
-            >
-              🔊 Tap for sound
-            </button>
-          )}
 
           {/* Loading animation - covers the video until it's ready to play */}
           <AnimatePresence>

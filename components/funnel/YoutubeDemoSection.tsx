@@ -1,12 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Reveal from '@/components/Reveal'
 import {
   setActiveVideo,
   onActiveVideoChange,
-  hasUserInteracted,
-  markUserInteracted,
   onUserInteracted,
 } from '@/lib/videoPlayback'
 
@@ -16,7 +14,6 @@ export default function YoutubeDemoSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const inViewRef = useRef(false)
-  const [isMuted, setIsMuted] = useState(true)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -30,15 +27,10 @@ export default function YoutubeDemoSection() {
       )
     }
 
-    const unmute = () => {
+    const play = () => {
+      setActiveVideo('youtube')
       post('unMute')
       post('setVolume', [100])
-      setIsMuted(false)
-    }
-
-    const playWithSound = () => {
-      setActiveVideo('youtube')
-      if (hasUserInteracted()) unmute()
       post('playVideo')
     }
 
@@ -50,7 +42,7 @@ export default function YoutubeDemoSection() {
       ([entry]) => {
         const visible = entry.isIntersecting && entry.intersectionRatio >= 0.4
         inViewRef.current = visible
-        if (visible) playWithSound()
+        if (visible) play()
         else pause()
       },
       { threshold: [0, 0.4, 0.7] }
@@ -63,8 +55,7 @@ export default function YoutubeDemoSection() {
     })
 
     const stopUnlock = onUserInteracted(() => {
-      unmute()
-      if (inViewRef.current) playWithSound()
+      if (inViewRef.current) play()
     })
 
     return () => {
@@ -73,24 +64,6 @@ export default function YoutubeDemoSection() {
       stopUnlock()
     }
   }, [])
-
-  const enableSound = () => {
-    markUserInteracted()
-    const iframe = iframeRef.current
-    iframe?.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func: 'unMute', args: [] }),
-      '*'
-    )
-    iframe?.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func: 'setVolume', args: [100] }),
-      '*'
-    )
-    iframe?.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
-      '*'
-    )
-    setIsMuted(false)
-  }
 
   return (
     <section ref={sectionRef} className="relative bg-transparent px-4 py-8 sm:py-10">
@@ -103,26 +76,17 @@ export default function YoutubeDemoSection() {
         </Reveal>
 
         <Reveal delayMs={100}>
-          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur-sm">
+          <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur-sm">
             <div className="relative aspect-video w-full">
               <iframe
                 ref={iframeRef}
                 className="absolute inset-0 h-full w-full"
-                src={`https://www.youtube.com/embed/${YOUTUBE_ID}?enablejsapi=1&mute=1&playsinline=1&rel=0&modestbranding=1`}
+                src={`https://www.youtube.com/embed/${YOUTUBE_ID}?enablejsapi=1&autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1`}
                 title="Kottu Cutting Machine Demo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 loading="lazy"
               />
-              {isMuted && (
-                <button
-                  type="button"
-                  onClick={enableSound}
-                  className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/25 bg-black/70 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-sm"
-                >
-                  🔊 Tap for sound
-                </button>
-              )}
             </div>
           </div>
         </Reveal>
