@@ -8,6 +8,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['var(--font-noto-sinhala)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         navy: "#0b1f3a",
