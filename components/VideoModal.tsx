@@ -14,14 +14,13 @@ interface VideoModalProps {
   autoPlay?: boolean
 }
 
-// The video overlay alternates between two things, each shown for
-// OVERLAY_VISIBLE_SECONDS with a OVERLAY_GAP_SECONDS break in between:
-// WhatsApp CTA -> gap -> scroll-down cue -> gap -> repeat. Driven off video
+// The video overlay shows the Call CTA for OVERLAY_VISIBLE_SECONDS,
+// then hides for OVERLAY_GAP_SECONDS, and repeats. Driven off video
 // playback time so it also re-triggers correctly each time the looping
 // video comes back around.
 const OVERLAY_VISIBLE_SECONDS = 7
 const OVERLAY_GAP_SECONDS = 10
-const OVERLAY_CYCLE_SECONDS = OVERLAY_VISIBLE_SECONDS * 2 + OVERLAY_GAP_SECONDS * 2
+const OVERLAY_CYCLE_SECONDS = OVERLAY_VISIBLE_SECONDS + OVERLAY_GAP_SECONDS
 
 const ctaContainerVariants = {
   hidden: {},
@@ -59,7 +58,6 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   const sectionRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [showCTA, setShowCTA] = useState(false)
-  const [showScrollCue, setShowScrollCue] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [isVideoReady, setIsVideoReady] = useState(false)
@@ -167,17 +165,14 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     })
   }, [])
 
-  // Alternate the WhatsApp CTA and the scroll-down cue on the video overlay,
-  // and keep the scrub bar's position in sync.
+  // Show the Call CTA on the video overlay, and keep the scrub bar in sync.
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
     const handleTimeUpdate = () => {
       const t = video.currentTime
       const pos = t % OVERLAY_CYCLE_SECONDS
-      const scrollCueStart = OVERLAY_VISIBLE_SECONDS + OVERLAY_GAP_SECONDS
       setShowCTA(pos < OVERLAY_VISIBLE_SECONDS)
-      setShowScrollCue(pos >= scrollCueStart && pos < scrollCueStart + OVERLAY_VISIBLE_SECONDS)
       setCurrentTime(t)
     }
     const handleLoadedMetadata = () => setDuration(video.duration || 0)
@@ -214,11 +209,11 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   if (!isOpen) return null
 
   return (
-    <section ref={sectionRef} className="relative bg-transparent px-4 py-12 sm:py-16">
-      <div className="relative z-10 mx-auto max-w-2xl">
-        {/* Video Container - Portrait Mode */}
+    <section ref={sectionRef} className="relative bg-transparent px-4 py-8 sm:py-10">
+      <div className="relative z-10 mx-auto max-w-lg">
+        {/* Video Container - same size as feedback video */}
         <motion.div
-          className="relative w-full aspect-[9/16] bg-black rounded-3xl overflow-hidden shadow-2xl"
+          className="relative mx-auto w-full max-w-[400px] aspect-[9/16] overflow-hidden rounded-2xl border border-white/15 bg-black shadow-lg sm:max-w-[460px]"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
@@ -359,82 +354,6 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
               </p>
             </motion.div>
           </motion.div>
-
-          {/* Scroll-down cue - alternates with the CTA above, nudges visitors toward the specs/details sections */}
-          <motion.div
-            className="absolute inset-0 flex flex-col items-center justify-end p-4 sm:p-5 pointer-events-none"
-            initial="hidden"
-            animate={showScrollCue ? 'visible' : 'hidden'}
-            variants={ctaContainerVariants}
-          >
-            <motion.a
-              href="#specs"
-              className="pointer-events-auto flex flex-col items-center gap-1.5 py-2.5"
-              variants={sinhalaPopVariants}
-            >
-              <span className="text-center text-white text-sm sm:text-base font-bold bg-black/25 backdrop-blur-sm border border-white/15 rounded-full px-4 py-2.5 shadow-lg">
-                තවත් විසතර සදහා පහලට යන්න
-              </span>
-              <motion.span
-                className="text-2xl leading-none text-white"
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                ↓
-              </motion.span>
-            </motion.a>
-          </motion.div>
-        </motion.div>
-
-        {/* Below Video: CTA buttons + price card */}
-        <motion.div
-          className="mt-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          {/* CTA buttons */}
-          <div className="mb-6">
-            <a
-              href="tel:+94760360560"
-              className="btn-english flex w-full items-center justify-center gap-2 rounded-2xl border border-orange/40 bg-orange/20 px-6 py-4 font-bold text-white backdrop-blur-sm transition-colors hover:bg-orange/30"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-orange text-white">
-                📞
-              </span>
-              Call Now
-            </a>
-          </div>
-
-          {/* Price card */}
-          <div className="relative">
-            <div className="absolute -top-4 left-4 z-10 flex items-center gap-2 rounded-full bg-orange px-4 py-2 text-base font-extrabold text-white shadow-lg shadow-orange/50 sm:text-lg">
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" /></svg>
-              10% OFF
-            </div>
-
-            <div className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-sm overflow-hidden">
-              <div className="h-[2px] bg-gradient-to-r from-orange via-whatsapp to-electric" />
-              <div className="px-5 pt-5 pb-4">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-blue-300 text-sm font-medium">Selling Price</p>
-                  <p className="text-xl font-bold text-white/50 line-through sm:text-2xl">රු. 99,500</p>
-                </div>
-                <p className="mb-3 text-4xl font-extrabold leading-none tracking-tight text-white sm:text-5xl">
-                  රු. 89,550
-                </p>
-                <div className="flex items-center gap-2.5 bg-whatsapp/15 border border-whatsapp/40 rounded-xl px-4 py-2.5">
-                  <svg className="w-5 h-5 text-whatsapp flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <p className="text-whatsapp font-extrabold text-lg leading-none tracking-tight">රු. 9,950 Saved!</p>
-                    <p className="text-whatsapp/70 text-xs font-semibold mt-0.5">Last Price රු. 89,550</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </motion.div>
       </div>
     </section>

@@ -36,7 +36,7 @@ function Stars({ count }: { count: number }) {
 
 export default function SocialProof() {
   return (
-    <section className="relative bg-transparent px-4 py-12 sm:py-16">
+    <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
         <Reveal>
           <h2 className="text-center text-2xl font-extrabold text-white sm:text-3xl">
@@ -47,7 +47,7 @@ export default function SocialProof() {
           </p>
         </Reveal>
 
-        <div className="mt-6 space-y-3">
+        <div className="mt-4 space-y-3">
           {testimonials.map((t, i) => (
             <Reveal key={t.name} delayMs={i * 100}>
               <blockquote className="rounded-xl border border-white/15 bg-white/10 px-3.5 py-3 backdrop-blur-sm">

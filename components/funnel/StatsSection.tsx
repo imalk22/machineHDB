@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Factory, MapPin, Layers, type LucideIcon } from 'lucide-react'
+import { useInView } from '@/hooks/useInView'
+import { useCountUp } from '@/hooks/useCountUp'
 
 const stats: {
   target: number
@@ -29,60 +31,34 @@ const stats: {
   },
 ]
 
-function useScrollCount(target: number, playId: number, durationMs = 2000) {
-  const [value, setValue] = useState(0)
-
-  useEffect(() => {
-    if (playId === 0) return
-
-    setValue(0)
-
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setValue(target)
-      return
-    }
-
-    let frame = 0
-    const startTime = performance.now()
-
-    const tick = (now: number) => {
-      const progress = Math.min((now - startTime) / durationMs, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setValue(target * eased)
-      if (progress < 1) frame = requestAnimationFrame(tick)
-    }
-
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
-  }, [playId, target, durationMs])
-
-  return value
-}
-
 function StatCard({
   target,
   suffix,
   en,
   icon: Icon,
-  playId,
+  start,
   delayMs,
 }: {
   target: number
   suffix: string
   en: string
   icon: LucideIcon
-  playId: number
+  start: boolean
   delayMs: number
 }) {
-  const [cardPlayId, setCardPlayId] = useState(0)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    if (playId === 0) return
-    const t = window.setTimeout(() => setCardPlayId(playId), delayMs)
+    if (!start) return
+    if (delayMs <= 0) {
+      setReady(true)
+      return
+    }
+    const t = window.setTimeout(() => setReady(true), delayMs)
     return () => window.clearTimeout(t)
-  }, [playId, delayMs])
+  }, [start, delayMs])
 
-  const value = useScrollCount(target, cardPlayId, 2200)
+  const value = useCountUp(target, ready, 2200)
 
   return (
     <div className="flex min-h-[130px] flex-col items-center justify-center rounded-2xl border border-white/25 bg-white/10 px-1.5 py-4 text-center shadow-lg backdrop-blur-md sm:min-h-[160px] sm:rounded-3xl sm:px-3 sm:py-5">
@@ -101,40 +77,16 @@ function StatCard({
 }
 
 export default function StatsSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const wasInView = useRef(false)
-  const [playId, setPlayId] = useState(0)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const inView = entry.isIntersecting && entry.intersectionRatio >= 0.25
-        if (inView && !wasInView.current) {
-          setPlayId((id) => id + 1)
-        }
-        wasInView.current = inView
-      },
-      { threshold: [0, 0.25, 0.5, 0.75], rootMargin: '0px' }
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+  const { ref, isInView } = useInView<HTMLElement>(0.15)
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-transparent px-3 py-10 sm:px-4 sm:py-12"
-    >
+    <section ref={ref} className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto grid max-w-5xl grid-cols-3 gap-2 sm:gap-4">
         {stats.map((stat, index) => (
           <StatCard
             key={stat.en}
             {...stat}
-            playId={playId}
+            start={isInView}
             delayMs={index * 150}
           />
         ))}

@@ -12,7 +12,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="relative bg-transparent px-4 py-12 sm:py-16">
+    <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
         <Reveal>
           <h2 className="text-center text-2xl font-extrabold text-white sm:text-3xl">
@@ -23,7 +23,7 @@ export default function HowItWorks() {
           </p>
         </Reveal>
 
-        <ol className="mt-8 space-y-3">
+        <ol className="mt-6 space-y-3">
           {steps.map((s, i) => {
             const Icon = s.icon
             return (

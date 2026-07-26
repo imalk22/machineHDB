@@ -28,9 +28,9 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="relative bg-transparent px-4 py-12 sm:py-16">
+    <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
-        <Reveal className="mb-8 text-center">
+        <Reveal className="mb-5 text-center">
           <h2 className="text-2xl font-extrabold leading-tight text-white sm:text-3xl">
             නිතර අසන ප්‍රශ්ණ (FAQ)
           </h2>

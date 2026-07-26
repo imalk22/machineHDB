@@ -1,77 +1,20 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import Reveal from '@/components/Reveal'
-import {
-  setActiveVideo,
-  onActiveVideoChange,
-  hasUserInteracted,
-  markUserInteracted,
-} from '@/lib/videoPlayback'
+import { useYoutubeInViewPlayer } from '@/hooks/useYoutubeInViewPlayer'
 
-const VIDEO_SRC = '/videos/feedbackvedio.mp4'
+const YOUTUBE_ID = 'X03dd14RUIE'
 
 export default function FeedbackVideoSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const section = sectionRef.current
-    const video = videoRef.current
-    if (!section || !video) return
-
-    const playWithSound = () => {
-      setActiveVideo('feedback')
-      // Prefer sound after any tap on the page; browsers block unmuted autoplay otherwise.
-      video.muted = !hasUserInteracted()
-      void video.play().then(() => {
-        if (hasUserInteracted()) video.muted = false
-      }).catch(() => {
-        video.muted = true
-        void video.play().catch(() => {})
-      })
-    }
-
-    const pause = () => {
-      video.pause()
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
-          playWithSound()
-        } else {
-          pause()
-        }
-      },
-      { threshold: [0, 0.4, 0.7] }
-    )
-
-    observer.observe(section)
-
-    const stopIfOther = onActiveVideoChange((id) => {
-      if (id !== 'feedback') pause()
-    })
-
-    const unlock = () => {
-      markUserInteracted()
-      if (!video.paused) video.muted = false
-    }
-    document.addEventListener('click', unlock, { once: true })
-    document.addEventListener('touchstart', unlock, { once: true })
-
-    return () => {
-      observer.disconnect()
-      stopIfOther()
-      document.removeEventListener('click', unlock)
-      document.removeEventListener('touchstart', unlock)
-    }
-  }, [])
+  const { sectionRef, iframeRef, togglePause, src } = useYoutubeInViewPlayer({
+    youtubeId: YOUTUBE_ID,
+    activeId: 'feedback',
+  })
 
   return (
-    <section ref={sectionRef} className="relative bg-transparent px-4 py-12 sm:py-16">
+    <section ref={sectionRef} className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
-        <Reveal className="mb-6 text-center">
+        <Reveal className="mb-5 text-center">
           <h2 className="text-xl font-extrabold leading-snug text-white sm:text-2xl">
             පාරිභෝගික Feedback Video
           </h2>
@@ -81,17 +24,22 @@ export default function FeedbackVideoSection() {
         </Reveal>
 
         <Reveal delayMs={100}>
-          <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur-sm sm:max-w-[420px]">
-            <div className="relative aspect-[9/16] w-full bg-black/40">
-              <video
-                ref={videoRef}
-                className="absolute inset-0 h-full w-full object-cover"
-                src={VIDEO_SRC}
-                playsInline
-                loop
-                preload="metadata"
-                controls
-                aria-label="Customer feedback video"
+          <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-2xl border border-white/15 bg-black shadow-lg sm:max-w-[420px]">
+            <div className="relative aspect-[9/16] w-full overflow-hidden bg-black">
+              <iframe
+                ref={iframeRef}
+                className="absolute left-0 w-full max-w-none border-0"
+                style={{ top: '-14%', height: '128%' }}
+                src={src}
+                title="Customer feedback video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                loading="eager"
+              />
+              <button
+                type="button"
+                className="absolute inset-0 z-10 cursor-pointer bg-transparent"
+                aria-label="Play or pause feedback video"
+                onClick={togglePause}
               />
             </div>
           </div>

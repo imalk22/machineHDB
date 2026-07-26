@@ -19,7 +19,7 @@ export default function Reveal({ children, className = '', delayMs = 0 }: Reveal
     <div
       ref={ref}
       className={`transition-all duration-700 ease-out ${
-        isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
       } ${className}`}
       style={{ transitionDelay: `${delayMs}ms` }}
     >

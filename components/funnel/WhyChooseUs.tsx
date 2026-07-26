@@ -38,7 +38,7 @@ const reasons = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="relative bg-transparent px-4 py-12 sm:py-16">
+    <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
         <Reveal className="text-center">
           <h2 className="text-xl font-extrabold leading-tight text-white sm:text-2xl">
@@ -50,7 +50,7 @@ export default function WhyChooseUs() {
           </span>
         </Reveal>
 
-        <div className="mt-8 space-y-3">
+        <div className="mt-6 space-y-3">
           {reasons.map((reason, index) => {
             const Icon = reason.icon
             return (

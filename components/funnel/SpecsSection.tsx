@@ -46,13 +46,13 @@ function CounterCard({ label, target, decimals, suffix }: (typeof counterSpecs)[
   return (
     <div
       ref={ref}
-      className="rounded-2xl border border-white/15 bg-white/10 p-3 text-center backdrop-blur-sm sm:p-4"
+      className="rounded-2xl border border-white/25 bg-white/15 p-3 text-center backdrop-blur-sm sm:p-4"
     >
-      <p className="text-xl font-black leading-none text-brand-cta sm:text-2xl">
+      <p className="text-xl font-black leading-none text-flame-amber sm:text-2xl">
         {value.toFixed(decimals)}
         {suffix}
       </p>
-      <p className="font-english mt-1 text-[10px] font-semibold uppercase tracking-wide text-white/60 sm:text-xs">
+      <p className="font-english mt-1.5 text-[10px] font-semibold uppercase tracking-wide text-white/85 sm:text-xs">
         {label}
       </p>
     </div>
@@ -61,7 +61,7 @@ function CounterCard({ label, target, decimals, suffix }: (typeof counterSpecs)[
 
 export default function SpecsSection() {
   return (
-    <section id="specs" className="relative bg-transparent px-4 py-12 sm:py-16">
+    <section id="specs" className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
         <Reveal className="text-center">
           <span className="font-english mb-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
@@ -73,7 +73,7 @@ export default function SpecsSection() {
           </h2>
         </Reveal>
 
-        <div className="mt-8 grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
           {counterSpecs.map((spec) => (
             <CounterCard key={spec.label} {...spec} />
           ))}

@@ -51,6 +51,10 @@ export default function RootLayout({
     <html lang="si" className={notoSansSinhala.variable}>
       <head>
         <meta charSet="utf-8" />
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://i.ytimg.com" />
+        <link rel="dns-prefetch" href="https://www.youtube.com" />
+        <link rel="dns-prefetch" href="https://i.ytimg.com" />
       </head>
       <body className="bg-navy text-white antialiased">
         {children}

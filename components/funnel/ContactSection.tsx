@@ -6,7 +6,7 @@ import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL, LOCATION } from '@/lib/contact'
 
 export default function ContactSection() {
   return (
-    <section className="relative bg-transparent px-4 py-12 pb-28 sm:py-16">
+    <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
         <Reveal>
           <h2 className="text-center text-2xl font-extrabold text-white sm:text-3xl">
@@ -17,7 +17,7 @@ export default function ContactSection() {
           </p>
         </Reveal>
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-6 space-y-4">
           <Reveal delayMs={80}>
             <a
               href={`tel:${PHONE_TEL}`}
@@ -66,12 +66,6 @@ export default function ContactSection() {
             </div>
           </Reveal>
         </div>
-
-        <Reveal delayMs={320} className="mt-8 text-center">
-          <p className="font-english text-sm text-white/45">
-            © {new Date().getFullYear()} HDB Engineering Lanka (Pvt) Ltd
-          </p>
-        </Reveal>
       </div>
     </section>
   )

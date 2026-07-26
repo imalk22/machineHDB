@@ -23,10 +23,10 @@ const uses = [
 ]
 
 const boxPhotos = [
-  '/images/display/machinedis-1.png',
-  '/images/display/machinedis-2.png',
-  '/images/display/machinedis-3.png',
-  '/images/display/machinedis-4.png',
+  '/images/display/machinedis-1.jpg',
+  '/images/display/machinedis-2.jpg',
+  '/images/display/machinedis-3.jpg',
+  '/images/display/machinedis-4.jpg',
 ]
 
 export default function KottuMachine() {
@@ -36,10 +36,10 @@ export default function KottuMachine() {
   const next = () => setActive((i) => (i === productImages.length - 1 ? 0 : i + 1))
 
   return (
-    <section className="relative bg-transparent px-4 py-12 sm:py-16">
+    <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-xl">
         <Reveal>
-          <h2 className="font-english text-center text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl">
+          <h2 className="font-english whitespace-nowrap text-center text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
             Commercial Kottu Cutting Machine
           </h2>
           <p className="mt-3 text-center text-xl font-bold text-white/90 sm:text-2xl">
@@ -47,8 +47,8 @@ export default function KottuMachine() {
           </p>
         </Reveal>
 
-        <Reveal delayMs={100} className="mt-8">
-          <article className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur-sm">
+        <Reveal delayMs={100} className="mt-6">
+          <article className="relative overflow-hidden rounded-2xl">
             <div className="relative mx-auto h-[300px] w-full sm:h-[360px]">
               <Image
                 src={productImages[active]}
@@ -101,11 +101,11 @@ export default function KottuMachine() {
             <div className="relative px-5 pb-6 pt-6 sm:px-6">
               <div className="relative pt-2">
                 <motion.div
-                  className="absolute -top-3 left-3 z-10 flex items-center gap-2 rounded-full bg-orange px-4 py-2 text-base font-extrabold text-white shadow-lg shadow-orange/50 sm:text-lg"
+                  className="absolute -top-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-orange px-3 py-1.5 text-sm font-extrabold text-white shadow-lg shadow-orange/50"
                   animate={{ scale: [1, 1.08, 1] }}
                   transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
+                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden>
                     <path
                       fillRule="evenodd"
                       d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
@@ -115,25 +115,37 @@ export default function KottuMachine() {
                   10% OFF
                 </motion.div>
 
-                <div className="overflow-hidden rounded-2xl border border-white/15 bg-white/10 pt-5">
+                <div className="overflow-hidden rounded-xl border border-white/15 bg-white/10 backdrop-blur-sm">
                   <div className="h-[2px] bg-gradient-to-r from-orange via-whatsapp to-electric" />
-                  <div className="px-4 pb-4 pt-4 sm:px-5">
-                    <p className="font-english text-center text-sm font-semibold uppercase tracking-wide text-white/60">
-                      Special Offer
-                    </p>
-
-                    <div className="mt-3 flex flex-wrap items-end justify-center gap-x-3 gap-y-1">
-                      <p className="text-lg text-white/40 line-through">රු. 99,500</p>
-                      <p className="text-3xl font-extrabold text-brand-cta">රු. 89,550</p>
+                  <div className="px-4 pb-3 pt-4">
+                    <div className="mb-1.5 flex items-center justify-between">
+                      <p className="font-english text-xs font-medium text-blue-300">Selling Price</p>
+                      <p className="text-base font-bold text-white/50 line-through sm:text-lg">රු. 99,500</p>
                     </div>
-                    <div className="mt-3 flex justify-center">
-                      <motion.span
-                        className="inline-block rounded-full bg-whatsapp px-4 py-1.5 text-sm font-bold text-white shadow-md shadow-whatsapp/40"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                    <p className="mb-2.5 text-3xl font-extrabold leading-none tracking-tight text-white sm:text-4xl">
+                      රු. 89,550
+                    </p>
+                    <div className="flex items-center gap-2 rounded-lg border border-whatsapp/40 bg-whatsapp/15 px-3 py-2">
+                      <svg
+                        className="h-4 w-4 flex-shrink-0 text-whatsapp"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        aria-hidden
                       >
-                        රු. 9,950 ඉතිරි කරගන්න
-                      </motion.span>
+                        <path
+                          fillRule="evenodd"
+                          d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <div>
+                        <p className="text-base font-extrabold leading-none tracking-tight text-whatsapp">
+                          රු. 9,950 Saved!
+                        </p>
+                        <p className="mt-0.5 text-[11px] font-semibold text-whatsapp/70">
+                          Last Price රු. 89,550
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
