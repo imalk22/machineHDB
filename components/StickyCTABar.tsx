@@ -23,7 +23,7 @@ export default function StickyCTABar() {
       }`}
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="border-t border-white/10 bg-charcoal/80 p-3 shadow-lg backdrop-blur-md">
+      <div className="border-t border-white/10 bg-navy/80 p-3 shadow-lg backdrop-blur-md">
         <a
           href={`tel:${PHONE_TEL}`}
           className="btn-english flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-brand-cta/40 bg-brand-cta/20 py-3.5 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:bg-brand-cta/30"

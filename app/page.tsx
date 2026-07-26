@@ -19,7 +19,7 @@ import SoundUnlock from '@/components/SoundUnlock'
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-charcoal">
+    <main className="relative min-h-screen overflow-x-hidden bg-navy">
       <SoundUnlock />
       <BlueprintPattern fixed />
 
