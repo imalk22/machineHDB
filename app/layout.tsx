@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Bebas_Neue, Noto_Sans_Sinhala } from 'next/font/google'
+import { Montserrat, Noto_Sans_Sinhala } from 'next/font/google'
 import Script from 'next/script'
 import MetaPixelContactTracker from '@/components/MetaPixelContactTracker'
 import './globals.css'
@@ -13,8 +13,8 @@ const notoSansSinhala = Noto_Sans_Sinhala({
   preload: true,
 })
 
-const bebasNeue = Bebas_Neue({
-  weight: '400',
+const montserrat = Montserrat({
+  weight: ['700'],
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
@@ -56,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="si" className={`${notoSansSinhala.variable} ${bebasNeue.variable}`}>
+    <html lang="si" className={`${notoSansSinhala.variable} ${montserrat.variable}`}>
       <head>
         <meta charSet="utf-8" />
         <link rel="preconnect" href="https://www.youtube.com" />
