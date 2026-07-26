@@ -52,11 +52,9 @@ export default function RootLayout({
     <html lang="si" className={notoSansSinhala.variable}>
       <head>
         <meta charSet="utf-8" />
-        <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="" />
-        <link rel="preconnect" href="https://www.youtube-nocookie.com" />
-        <link rel="dns-prefetch" href="https://www.youtube-nocookie.com" />
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
-        <link rel="preload" as="image" href="https://i.ytimg.com/vi/MgbIAa46c9o/hqdefault.jpg" />
       </head>
       <body className="bg-navy text-white antialiased">
         {children}
