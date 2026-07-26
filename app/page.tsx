@@ -14,10 +14,12 @@ import ContactSection from '@/components/funnel/ContactSection'
 import StickyCTABar from '@/components/StickyCTABar'
 import FloatingCallButton from '@/components/funnel/FloatingCallButton'
 import BlueprintPattern from '@/components/BlueprintPattern'
+import SoundUnlock from '@/components/SoundUnlock'
 
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-navy">
+      <SoundUnlock />
       <BlueprintPattern fixed />
 
       <div className="relative z-10">

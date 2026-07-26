@@ -6,6 +6,8 @@ import {
   setActiveVideo,
   onActiveVideoChange,
   markUserInteracted,
+  hasUserInteracted,
+  onUserInteracted,
 } from '@/lib/videoPlayback'
 
 interface VideoModalProps {
@@ -63,6 +65,17 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   const [isVideoReady, setIsVideoReady] = useState(false)
   const [videoError, setVideoError] = useState(false)
   const [isPlaying, setIsPlaying] = useState(autoPlay)
+  const [isMuted, setIsMuted] = useState(true)
+
+  const enableSound = () => {
+    const video = videoRef.current
+    if (!video) return
+    markUserInteracted()
+    video.muted = false
+    video.volume = 1
+    setIsMuted(false)
+    if (video.paused) video.play().catch(() => {})
+  }
 
   // Mark ready from readyState / events. After React remounts (Strict Mode /
   // HMR), canplay may not fire again if the file is already buffered.
@@ -98,40 +111,38 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     const video = videoRef.current
     if (!isOpen || !video || !autoPlay) return
 
-    // Autoplay requires starting muted. Unmuting immediately (even after
-    // play() resolves) makes Chrome pause the video outright instead of
-    // playing it unmuted, since there's been no user gesture yet - so stay
-    // muted here and let the listener below unmute on the visitor's first tap.
-    video.muted = true
+    // Start muted (browser policy), then unmute as soon as any page tap happens.
+    const wantSound = hasUserInteracted()
+    video.muted = !wantSound
+    setIsMuted(!wantSound)
+    if (wantSound) video.volume = 1
     setActiveVideo('hero')
     const tryPlay = () => {
-      video.play().catch(() => {})
+      video.play().catch(() => {
+        video.muted = true
+        setIsMuted(true)
+        video.play().catch(() => {})
+      })
     }
     tryPlay()
-    // Retry shortly in case the first play raced ahead of buffering
     const t = window.setTimeout(tryPlay, 400)
     return () => window.clearTimeout(t)
   }, [isOpen, autoPlay])
 
-  // Unmute (and resume play, in case the browser paused it) on the
-  // visitor's first tap/click anywhere on the page.
+  // Unmute the moment the visitor taps anywhere (or already has).
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-    const ensureSound = () => {
-      markUserInteracted()
+    return onUserInteracted(() => {
+      const video = videoRef.current
+      if (!video) return
       video.muted = false
-      if (video.paused) video.play().catch(() => {})
-    }
-    document.addEventListener('click', ensureSound, { once: true })
-    document.addEventListener('touchstart', ensureSound, { once: true })
-    return () => {
-      document.removeEventListener('click', ensureSound)
-      document.removeEventListener('touchstart', ensureSound)
-    }
+      video.volume = 1
+      setIsMuted(false)
+      if (!video.paused) return
+      // Don't force-play if scrolled away — intersection handler owns that
+    })
   }, [])
 
-  // Pause when scrolled away; resume when hero is back in view.
+  // Pause when scrolled away; resume with sound when back in view.
   useEffect(() => {
     const section = sectionRef.current
     const video = videoRef.current
@@ -139,8 +150,13 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
           setActiveVideo('hero')
+          if (hasUserInteracted()) {
+            video.muted = false
+            video.volume = 1
+            setIsMuted(false)
+          }
           video.play().catch(() => {})
           setIsPlaying(true)
         } else {
@@ -148,7 +164,7 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
           setIsPlaying(false)
         }
       },
-      { threshold: [0, 0.4, 0.7] }
+      { threshold: [0, 0.35, 0.7] }
     )
 
     observer.observe(section)
@@ -194,10 +210,9 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   const togglePlay = () => {
     const video = videoRef.current
     if (!video) return
-    markUserInteracted()
+    enableSound()
     if (video.paused) {
       setActiveVideo('hero')
-      video.muted = false
       video.play().catch(() => {})
     } else {
       video.pause()
@@ -227,7 +242,7 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             loop
             preload="auto"
             playsInline
-            muted
+            muted={isMuted}
             onCanPlay={() => setIsVideoReady(true)}
             onLoadedData={() => setIsVideoReady(true)}
             onPlaying={() => setIsVideoReady(true)}
@@ -239,6 +254,17 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             }}
             onClick={togglePlay}
           />
+
+          {/* Tap prompt — phones block sound until a gesture */}
+          {isMuted && isVideoReady && (
+            <button
+              type="button"
+              onClick={enableSound}
+              className="absolute bottom-16 left-1/2 z-30 -translate-x-1/2 rounded-full border border-white/25 bg-black/70 px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-sm"
+            >
+              🔊 Tap for sound
+            </button>
+          )}
 
           {/* Loading animation - covers the video until it's ready to play */}
           <AnimatePresence>
