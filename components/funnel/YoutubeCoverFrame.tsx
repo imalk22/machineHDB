@@ -1,6 +1,6 @@
 'use client'
 
-import type { CSSProperties, RefObject } from 'react'
+import type { CSSProperties, Ref } from 'react'
 
 /**
  * Shared YouTube frame: thumbnail covers iframe until showPoster is false.
@@ -22,7 +22,7 @@ export default function YoutubeCoverFrame({
   posterUrl: string
   showPoster: boolean
   title: string
-  iframeRef: RefObject<HTMLIFrameElement | null>
+  iframeRef: Ref<HTMLIFrameElement>
   onIframeLoad: () => void
   aspectClass: string
   iframeClassName?: string
