@@ -1,5 +1,6 @@
 'use client'
 
+import VideoModal from '@/components/VideoModal'
 import SpecsSection from '@/components/funnel/SpecsSection'
 import StatsSection from '@/components/funnel/StatsSection'
 import FAQSection from '@/components/funnel/FAQSection'
@@ -10,7 +11,6 @@ import SocialProof from '@/components/funnel/SocialProof'
 import FeedbackVideoSection from '@/components/funnel/FeedbackVideoSection'
 import HowItWorks from '@/components/funnel/HowItWorks'
 import ContactSection from '@/components/funnel/ContactSection'
-import LastYoutubeVideoSection from '@/components/funnel/LastYoutubeVideoSection'
 import StickyCTABar from '@/components/StickyCTABar'
 import FloatingCallButton from '@/components/funnel/FloatingCallButton'
 import BlueprintPattern from '@/components/BlueprintPattern'
@@ -31,7 +31,7 @@ export default function Home() {
         <StatsSection />
         <HowItWorks />
         <ContactSection />
-        <LastYoutubeVideoSection />
+        <VideoModal isOpen={true} onClose={() => {}} autoPlay={true} />
         <footer className="relative px-4 pb-28 pt-0 text-center sm:pb-24">
           <p className="font-english text-sm text-white/45">
             © 2026 HDB Engineering Lanka (Pvt) Ltd

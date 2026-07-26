@@ -226,7 +226,6 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             autoPlay={autoPlay}
             loop
             preload="auto"
-            poster="/images/video-poster.jpg"
             playsInline
             muted
             onCanPlay={() => setIsVideoReady(true)}
