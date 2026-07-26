@@ -11,7 +11,7 @@ export default {
         display: ['var(--font-display)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        navy: "#0b1f3a",
+        navy: "#143552",
         brand: {
           primary: '#0b1f3a',
           secondary: '#1B75D0',

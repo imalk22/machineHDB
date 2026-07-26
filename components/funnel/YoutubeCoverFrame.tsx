@@ -40,7 +40,7 @@ export default function YoutubeCoverFrame({
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
-          loading="lazy"
+          loading="eager"
           onLoad={onIframeLoad}
         />
       ) : null}
@@ -58,7 +58,7 @@ export default function YoutubeCoverFrame({
           alt=""
           className="h-full w-full object-cover"
           decoding="async"
-          fetchPriority="low"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black/25">
           <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/30">

@@ -133,16 +133,16 @@ export function useYoutubeInViewPlayer({
           warmObserver.disconnect()
         }
       },
-      { rootMargin: '900px 0px', threshold: 0 }
+      { rootMargin: '1400px 0px', threshold: 0 }
     )
     warmObserver.observe(section)
 
     const playObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.08) play()
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.05) play()
         else pause()
       },
-      { threshold: [0, 0.08, 0.15, 0.3], rootMargin: '0px 0px -4% 0px' }
+      { threshold: [0, 0.05, 0.15, 0.3], rootMargin: '120px 0px -2% 0px' }
     )
     playObserver.observe(section)
 
@@ -163,8 +163,8 @@ export function useYoutubeInViewPlayer({
 
     const rect = section.getBoundingClientRect()
     const vh = window.innerHeight || document.documentElement.clientHeight
-    if (rect.top < vh + 900) ensureIframe(false)
-    if (rect.top < vh * 0.92 && rect.bottom > vh * 0.08) play()
+    if (rect.top < vh + 1400) ensureIframe(false)
+    if (rect.top < vh * 0.95 && rect.bottom > vh * 0.05) play()
 
     return () => {
       warmObserver.disconnect()

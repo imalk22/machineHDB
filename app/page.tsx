@@ -26,10 +26,14 @@ export default function Home() {
       <div className="relative z-10">
         <KottuMachine />
         <SpecsSection />
+        <AdBannerSection />
         <WhyChooseUs />
         <YoutubeDemoSection />
         <FAQSection />
-        <AdBannerSection />
+        <AdBannerSection
+          src="/images/process.jpg"
+          alt="HDB Engineering Lanka — How the process works"
+        />
         <SocialProof />
         <FeedbackVideoSection />
         <StatsSection />

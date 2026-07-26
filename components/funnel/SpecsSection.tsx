@@ -63,12 +63,12 @@ export default function SpecsSection() {
   return (
     <section id="specs" className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-lg">
-        <Reveal className="text-center">
-          <span className="font-english mb-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
+        <Reveal className="flex flex-col items-center gap-4 text-center">
+          <span className="font-english inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
             <Wrench className="h-3.5 w-3.5" aria-hidden />
             Technical Specifications
           </span>
-          <h2 className="text-2xl font-extrabold leading-tight text-white sm:text-3xl">
+          <h2 className="text-xl font-extrabold leading-tight text-white sm:text-2xl">
             තාක්ෂණික විස්තර සහ වගකිම් සහතිකය
           </h2>
         </Reveal>
