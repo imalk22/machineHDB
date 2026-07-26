@@ -4,6 +4,7 @@ import VideoModal from '@/components/VideoModal'
 import SpecsSection from '@/components/funnel/SpecsSection'
 import StatsSection from '@/components/funnel/StatsSection'
 import FAQSection from '@/components/funnel/FAQSection'
+import AdBannerSection from '@/components/funnel/AdBannerSection'
 import YoutubeDemoSection from '@/components/funnel/YoutubeDemoSection'
 import KottuMachine from '@/components/funnel/KottuMachine'
 import WhyChooseUs from '@/components/funnel/WhyChooseUs'
@@ -28,6 +29,7 @@ export default function Home() {
         <WhyChooseUs />
         <YoutubeDemoSection />
         <FAQSection />
+        <AdBannerSection />
         <SocialProof />
         <FeedbackVideoSection />
         <StatsSection />
