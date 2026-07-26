@@ -1,68 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import Reveal from '@/components/Reveal'
-import {
-  setActiveVideo,
-  onActiveVideoChange,
-  markUserInteracted,
-  onUserInteracted,
-} from '@/lib/videoPlayback'
+import { useInViewLoudVideo } from '@/hooks/useInViewLoudVideo'
 
 const VIDEO_SRC = '/videos/feedbackvedio.mp4'
 
 export default function FeedbackVideoSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const inViewRef = useRef(false)
-
-  useEffect(() => {
-    const section = sectionRef.current
-    const video = videoRef.current
-    if (!section || !video) return
-
-    video.muted = false
-    video.volume = 1
-
-    const play = () => {
-      setActiveVideo('feedback')
-      video.muted = false
-      video.volume = 1
-      void video.play().catch(() => {
-        // Browser blocked until a gesture — retry on next tap (no mute fallback)
-      })
-    }
-
-    const pause = () => {
-      video.pause()
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const visible = entry.isIntersecting && entry.intersectionRatio >= 0.4
-        inViewRef.current = visible
-        if (visible) play()
-        else pause()
-      },
-      { threshold: [0, 0.4, 0.7] }
-    )
-
-    observer.observe(section)
-
-    const stopIfOther = onActiveVideoChange((id) => {
-      if (id !== 'feedback') pause()
-    })
-
-    const stopUnlock = onUserInteracted(() => {
-      if (inViewRef.current) play()
-    })
-
-    return () => {
-      observer.disconnect()
-      stopIfOther()
-      stopUnlock()
-    }
-  }, [])
+  const { sectionRef, videoRef } = useInViewLoudVideo('feedback')
 
   return (
     <section ref={sectionRef} className="relative bg-transparent px-4 py-8 sm:py-10">
@@ -85,11 +29,10 @@ export default function FeedbackVideoSection() {
                 src={VIDEO_SRC}
                 playsInline
                 loop
-                preload="metadata"
+                preload="auto"
                 controls
                 muted={false}
                 aria-label="Customer feedback video"
-                onPlay={() => markUserInteracted()}
               />
             </div>
           </div>

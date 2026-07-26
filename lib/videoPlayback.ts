@@ -40,12 +40,14 @@ export function installGlobalSoundUnlock() {
 
   document.addEventListener('pointerdown', unlock, opts)
   document.addEventListener('touchstart', unlock, opts)
+  document.addEventListener('touchend', unlock, opts)
   document.addEventListener('click', unlock, opts)
   document.addEventListener('keydown', unlock, opts)
 
   return () => {
     document.removeEventListener('pointerdown', unlock, opts)
     document.removeEventListener('touchstart', unlock, opts)
+    document.removeEventListener('touchend', unlock, opts)
     document.removeEventListener('click', unlock, opts)
     document.removeEventListener('keydown', unlock, opts)
   }

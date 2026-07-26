@@ -8,6 +8,7 @@ import {
   markUserInteracted,
   onUserInteracted,
 } from '@/lib/videoPlayback'
+import { playVideoLoud } from '@/hooks/useInViewLoudVideo'
 
 interface VideoModalProps {
   isOpen: boolean
@@ -65,15 +66,25 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   const [videoError, setVideoError] = useState(false)
   const [isPlaying, setIsPlaying] = useState(autoPlay)
   const inViewRef = useRef(false)
+  const timersRef = useRef<number[]>([])
+
+  const clearTimers = () => {
+    timersRef.current.forEach((id) => window.clearTimeout(id))
+    timersRef.current = []
+  }
 
   const playWithSound = () => {
     const video = videoRef.current
-    if (!video) return
-    video.muted = false
-    video.volume = 1
+    if (!video || !inViewRef.current) return
     setActiveVideo('hero')
-    void video.play().catch(() => {
-      // No mute fallback — retry after next user gesture via onUserInteracted
+    clearTimers()
+    const attempt = () => {
+      if (!inViewRef.current) return
+      void playVideoLoud(video).catch(() => {})
+    }
+    attempt()
+    ;[80, 250, 500, 1000, 2000].forEach((ms) => {
+      timersRef.current.push(window.setTimeout(attempt, ms))
     })
   }
 
@@ -82,6 +93,10 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   useEffect(() => {
     const video = videoRef.current
     if (!isOpen || !video) return
+
+    video.defaultMuted = false
+    video.muted = false
+    video.volume = 1
 
     const markReady = () => {
       setIsVideoReady(true)
@@ -108,25 +123,13 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   }, [isOpen])
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!isOpen || !video || !autoPlay) return
-
-    video.muted = false
-    video.volume = 1
-    playWithSound()
-    const t = window.setTimeout(playWithSound, 400)
-    return () => window.clearTimeout(t)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, autoPlay])
-
-  useEffect(() => {
     return onUserInteracted(() => {
       if (inViewRef.current) playWithSound()
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Pause when scrolled away; resume with sound when back in view.
+  // Play with sound as soon as this video scrolls into view
   useEffect(() => {
     const section = sectionRef.current
     const video = videoRef.current
@@ -134,21 +137,25 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
           inViewRef.current = true
           playWithSound()
           setIsPlaying(true)
         } else {
           inViewRef.current = false
+          clearTimers()
           video.pause()
           setIsPlaying(false)
         }
       },
-      { threshold: [0, 0.35, 0.7] }
+      { threshold: [0, 0.2, 0.4, 0.6], rootMargin: '0px 0px -8% 0px' }
     )
 
     observer.observe(section)
-    return () => observer.disconnect()
+    return () => {
+      clearTimers()
+      observer.disconnect()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
@@ -192,9 +199,8 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     const video = videoRef.current
     if (!video) return
     markUserInteracted()
-    video.muted = false
-    video.volume = 1
     if (video.paused) {
+      inViewRef.current = true
       playWithSound()
     } else {
       video.pause()
