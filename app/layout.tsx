@@ -63,7 +63,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
       </head>
-      <body className="bg-navy text-white antialiased">
+      <body className="bg-charcoal text-white antialiased">
         {children}
         <MetaPixelContactTracker />
         <Script
