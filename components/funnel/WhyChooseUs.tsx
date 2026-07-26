@@ -65,7 +65,7 @@ export default function WhyChooseUs() {
                         <Icon className="h-5 w-5 flex-shrink-0 text-brand-cta" aria-hidden />
                         <h3 className="text-base font-bold text-white">{reason.title}</h3>
                       </div>
-                      <p className="text-xs font-normal leading-relaxed text-white/80">{reason.desc}</p>
+                      <p className="text-xs font-semibold leading-relaxed text-white/85">{reason.desc}</p>
                       {reason.subtitle ? (
                         <p className="font-english mt-1 text-xs text-white/55">{reason.subtitle}</p>
                       ) : null}

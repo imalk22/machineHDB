@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Montserrat, Noto_Sans_Sinhala } from 'next/font/google'
+import { Noto_Sans_Sinhala } from 'next/font/google'
 import Script from 'next/script'
 import MetaPixelContactTracker from '@/components/MetaPixelContactTracker'
 import './globals.css'
@@ -7,17 +7,10 @@ import './globals.css'
 // Same font as https://hdbeng.netlify.app/ — normal Unicode Sinhala (no FM conversion)
 const notoSansSinhala = Noto_Sans_Sinhala({
   subsets: ['sinhala'],
-  weight: ['400', '700', '800'],
+  weight: ['400', '500', '600', '700', '800'],
   variable: '--font-noto-sinhala',
   display: 'swap',
   preload: true,
-})
-
-const montserrat = Montserrat({
-  weight: ['700'],
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
 })
 
 const GA_ID = 'G-2YVGT3DXXP'
@@ -56,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="si" className={`${notoSansSinhala.variable} ${montserrat.variable}`}>
+    <html lang="si" className={`${notoSansSinhala.variable} ${notoSansSinhala.className}`}>
       <head>
         <meta charSet="utf-8" />
         <link rel="preconnect" href="https://www.youtube.com" />
@@ -65,7 +58,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
       </head>
-      <body className="bg-navy text-white antialiased">
+      <body className="font-sans text-white antialiased" style={{ backgroundColor: '#0b1f3a' }}>
         {children}
         <MetaPixelContactTracker />
         <Script

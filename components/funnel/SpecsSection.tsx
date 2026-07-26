@@ -61,14 +61,14 @@ function CounterCard({ label, target, decimals, suffix }: (typeof counterSpecs)[
 
 export default function SpecsSection() {
   return (
-    <section id="specs" className="relative bg-transparent px-4 py-8 sm:py-10">
+    <section id="specs" className="relative bg-transparent px-4 pb-8 pt-5 sm:pb-10 sm:pt-6">
       <div className="relative mx-auto max-w-lg">
-        <Reveal className="flex flex-col items-center gap-4 text-center">
+        <Reveal className="flex flex-col items-center gap-6 text-center">
           <span className="font-english inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
             <Wrench className="h-3.5 w-3.5" aria-hidden />
             Technical Specifications
           </span>
-          <h2 className="text-xl font-extrabold leading-tight text-white sm:text-2xl">
+          <h2 className="text-2xl font-extrabold leading-tight text-white sm:text-3xl">
             තාක්ෂණික විස්තර සහ වගකිම් සහතිකය
           </h2>
         </Reveal>
@@ -116,7 +116,7 @@ export default function SpecsSection() {
                   <Check className="h-4 w-4 text-white" strokeWidth={3} aria-hidden />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold leading-snug text-white">{feature.si}</p>
+                  <p className="text-sm font-bold leading-snug text-white">{feature.si}</p>
                   <p className="font-english mt-0.5 text-xs leading-snug text-white/55">
                     {feature.en}
                   </p>

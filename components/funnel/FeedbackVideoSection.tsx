@@ -23,6 +23,7 @@ export default function FeedbackVideoSection() {
         <Reveal delayMs={100}>
           <div className="mx-auto w-full max-w-[360px] overflow-hidden rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur-sm sm:max-w-[420px]">
             <div className="relative aspect-[9/16] w-full bg-black/40">
+              {/* muted omitted from React props so unmute isn't overwritten on re-render */}
               <video
                 ref={videoRef}
                 className="absolute inset-0 h-full w-full object-cover"
@@ -30,8 +31,7 @@ export default function FeedbackVideoSection() {
                 playsInline
                 loop
                 preload="auto"
-                controls
-                muted={false}
+                autoPlay
                 aria-label="Customer feedback video"
               />
             </div>

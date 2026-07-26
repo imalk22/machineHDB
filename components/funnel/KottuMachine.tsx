@@ -39,7 +39,7 @@ export default function KottuMachine() {
     <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-xl">
         <Reveal>
-          <h2 className="font-display whitespace-nowrap text-center text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
+          <h2 className="font-english whitespace-nowrap text-center text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
             Commercial Kottu Cutting Machine
           </h2>
           <p className="mt-3 text-center text-xl font-bold text-white/90 sm:text-2xl">
@@ -120,7 +120,7 @@ export default function KottuMachine() {
                   <div className="h-[2px] bg-gradient-to-r from-orange via-whatsapp to-electric" />
                   <div className="px-4 pb-3 pt-4">
                     <div className="mb-1.5 flex items-center justify-between">
-                      <p className="font-english text-xs font-medium text-blue-300">Selling Price</p>
+                      <p className="font-english text-xs font-bold text-blue-300">Selling Price</p>
                       <p className="text-base font-bold text-white/50 line-through sm:text-lg">රු. 99,500</p>
                     </div>
                     <p className="mb-2.5 text-3xl font-extrabold leading-none tracking-tight text-white sm:text-4xl">
@@ -143,7 +143,7 @@ export default function KottuMachine() {
                         <p className="text-base font-extrabold leading-none tracking-tight text-whatsapp">
                           රු. 9,950 Saved!
                         </p>
-                        <p className="mt-0.5 text-[11px] font-semibold text-whatsapp/70">
+                        <p className="mt-0.5 text-[11px] font-bold text-whatsapp/70">
                           Last Price රු. 89,550
                         </p>
                       </div>
@@ -152,7 +152,7 @@ export default function KottuMachine() {
                 </div>
               </div>
 
-              <p className="mt-4 text-center text-sm leading-relaxed text-white/85 sm:text-[15px]">
+              <p className="mt-4 text-center text-sm font-semibold leading-relaxed text-white/90 sm:text-[15px]">
                 ඔයාගේ Restaurant එකට Catering service එකට සහ hotel එකට ගැලපෙන අත්‍යවශ්‍ය
                 machine එකක් තමයි Kottu Cutting Machine එක - මේ Machine එකෙන් වේගවත්ව සහ ඉක්මනට කොත්තු රොටී
                 කපගන්න හැකියාව තියෙනවා වගේම ඔයගේ Business එකත් බලන් ඉද්දිම Grow වෙනවා

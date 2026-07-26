@@ -55,7 +55,7 @@ export default function FAQSection() {
                     <span className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brand-cta text-xs font-bold text-white">
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <span className="text-sm font-semibold leading-snug text-white">
+                    <span className="text-sm font-bold leading-snug text-white">
                       {item.q}
                     </span>
                   </div>
@@ -76,7 +76,7 @@ export default function FAQSection() {
                       transition={{ duration: 0.25, ease: 'easeInOut' }}
                       className="overflow-hidden"
                     >
-                      <p className="px-4 pb-4 pl-14 text-sm leading-relaxed text-white/75 sm:px-5 sm:pb-5">
+                      <p className="px-4 pb-4 pl-14 text-sm font-medium leading-relaxed text-white/85 sm:px-5 sm:pb-5">
                         {item.a}
                       </p>
                     </motion.div>

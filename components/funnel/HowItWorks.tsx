@@ -36,7 +36,7 @@ export default function HowItWorks() {
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-white">{s.sinhala}</p>
+                    <p className="text-sm font-extrabold text-white">{s.sinhala}</p>
                     <p className="font-english text-xs text-white/60">{s.english}</p>
                   </div>
                 </li>

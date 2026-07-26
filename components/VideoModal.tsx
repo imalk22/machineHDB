@@ -94,8 +94,6 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     const video = videoRef.current
     if (!isOpen || !video) return
 
-    video.defaultMuted = false
-    video.muted = false
     video.volume = 1
 
     const markReady = () => {
@@ -230,14 +228,10 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             loop
             preload="auto"
             playsInline
-            muted={false}
             onCanPlay={() => setIsVideoReady(true)}
             onLoadedData={() => setIsVideoReady(true)}
             onPlaying={() => setIsVideoReady(true)}
-            onPlay={() => {
-              setIsPlaying(true)
-              markUserInteracted()
-            }}
+            onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
             onError={() => {
               setVideoError(true)

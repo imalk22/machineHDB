@@ -60,7 +60,7 @@ export default function ContactSection() {
               </div>
               <div>
                 <p className="font-english text-sm font-medium text-white/60">Location</p>
-                <p className="text-lg font-bold text-white">දඹුල්ල — Dambulla</p>
+                <p className="text-lg font-extrabold text-white">දඹුල්ල — Dambulla</p>
                 <p className="font-english mt-1 text-sm text-white/70">{LOCATION}</p>
               </div>
             </div>
