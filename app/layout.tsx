@@ -56,6 +56,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.youtube-nocookie.com" />
         <link rel="dns-prefetch" href="https://www.youtube-nocookie.com" />
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
+        {/* Prefetch video thumbnails so posters are ready before scroll */}
+        <link rel="preload" as="image" href="https://i.ytimg.com/vi/MgbIAa46c9o/hqdefault.jpg" />
+        <link rel="preload" as="image" href="https://i.ytimg.com/vi/X03dd14RUIE/hqdefault.jpg" />
+        <link rel="preload" as="image" href="https://i.ytimg.com/vi/PJLNLCJHPVg/hqdefault.jpg" />
       </head>
       <body className="bg-navy text-white antialiased">
         {children}
