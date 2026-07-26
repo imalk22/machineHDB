@@ -93,6 +93,7 @@ export default function KottuMachine() {
                     fill
                     className="object-cover"
                     sizes="56px"
+                    loading="lazy"
                   />
                 </button>
               ))}

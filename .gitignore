@@ -52,3 +52,5 @@ logs
 
 # Original uncompressed video backup (not deployed)
 /video-backups
+public/videos/*.original.mp4
+public/videos/*.mp4

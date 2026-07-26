@@ -1,19 +1,50 @@
 'use client'
 
-import SpecsSection from '@/components/funnel/SpecsSection'
-import StatsSection from '@/components/funnel/StatsSection'
-import FAQSection from '@/components/funnel/FAQSection'
-import YoutubeDemoSection from '@/components/funnel/YoutubeDemoSection'
+import dynamic from 'next/dynamic'
 import KottuMachine from '@/components/funnel/KottuMachine'
+import SpecsSection from '@/components/funnel/SpecsSection'
 import WhyChooseUs from '@/components/funnel/WhyChooseUs'
-import SocialProof from '@/components/funnel/SocialProof'
-import FeedbackVideoSection from '@/components/funnel/FeedbackVideoSection'
-import HowItWorks from '@/components/funnel/HowItWorks'
-import ContactSection from '@/components/funnel/ContactSection'
-import LastYoutubeVideoSection from '@/components/funnel/LastYoutubeVideoSection'
 import StickyCTABar from '@/components/StickyCTABar'
 import FloatingCallButton from '@/components/funnel/FloatingCallButton'
 import BlueprintPattern from '@/components/BlueprintPattern'
+
+const YoutubeDemoSection = dynamic(() => import('@/components/funnel/YoutubeDemoSection'), {
+  loading: () => <SectionSkeleton tall />,
+})
+const FAQSection = dynamic(() => import('@/components/funnel/FAQSection'), {
+  loading: () => <SectionSkeleton />,
+})
+const SocialProof = dynamic(() => import('@/components/funnel/SocialProof'), {
+  loading: () => <SectionSkeleton />,
+})
+const FeedbackVideoSection = dynamic(() => import('@/components/funnel/FeedbackVideoSection'), {
+  loading: () => <SectionSkeleton tall />,
+})
+const StatsSection = dynamic(() => import('@/components/funnel/StatsSection'), {
+  loading: () => <SectionSkeleton />,
+})
+const HowItWorks = dynamic(() => import('@/components/funnel/HowItWorks'), {
+  loading: () => <SectionSkeleton />,
+})
+const ContactSection = dynamic(() => import('@/components/funnel/ContactSection'), {
+  loading: () => <SectionSkeleton />,
+})
+const LastYoutubeVideoSection = dynamic(
+  () => import('@/components/funnel/LastYoutubeVideoSection'),
+  { loading: () => <SectionSkeleton tall /> }
+)
+
+function SectionSkeleton({ tall = false }: { tall?: boolean }) {
+  return (
+    <div
+      className={`mx-auto max-w-lg animate-pulse px-4 py-8 ${tall ? 'min-h-[280px]' : 'min-h-[120px]'}`}
+      aria-hidden
+    >
+      <div className="mx-auto mb-4 h-6 w-3/4 rounded bg-white/10" />
+      <div className={`rounded-2xl bg-white/5 ${tall ? 'aspect-video' : 'h-24'}`} />
+    </div>
+  )
+}
 
 export default function Home() {
   return (

@@ -7,9 +7,10 @@ import './globals.css'
 // Same font as https://hdbeng.netlify.app/ — normal Unicode Sinhala (no FM conversion)
 const notoSansSinhala = Noto_Sans_Sinhala({
   subsets: ['sinhala'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '700', '800'],
   variable: '--font-noto-sinhala',
   display: 'swap',
+  preload: true,
 })
 
 const GA_ID = 'G-2YVGT3DXXP'
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Commercial Kottu Cutting Machine | HDB Engineering Lanka',
     description: '10% OFF — Last Price රු. 89,550. Island-wide delivery',
-    images: ['/images/kottu-cutting-machine.png'],
+    images: ['/images/kottu-1.jpg'],
     locale: 'si_LK',
     type: 'website',
   },
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Commercial Kottu Cutting Machine | HDB Engineering Lanka',
     description: '10% OFF — Last Price රු. 89,550. Island-wide delivery',
-    images: ['/images/kottu-cutting-machine.png'],
+    images: ['/images/kottu-1.jpg'],
   },
 }
 
@@ -51,9 +52,9 @@ export default function RootLayout({
     <html lang="si" className={notoSansSinhala.variable}>
       <head>
         <meta charSet="utf-8" />
-        <link rel="preconnect" href="https://www.youtube.com" />
-        <link rel="preconnect" href="https://i.ytimg.com" />
-        <link rel="dns-prefetch" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://i.ytimg.com" crossOrigin="" />
+        <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+        <link rel="dns-prefetch" href="https://www.youtube-nocookie.com" />
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
       </head>
       <body className="bg-navy text-white antialiased">
@@ -61,9 +62,9 @@ export default function RootLayout({
         <MetaPixelContactTracker />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -71,7 +72,7 @@ export default function RootLayout({
             gtag('config', '${GA_ID}');
           `}
         </Script>
-        <Script id="meta-pixel" strategy="afterInteractive">
+        <Script id="meta-pixel" strategy="lazyOnload">
           {`
             !function(f,b,e,v,n,t,s)
             {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
