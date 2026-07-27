@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 function isElementInViewport(el: HTMLElement) {
   const rect = el.getBoundingClientRect()
@@ -15,7 +15,7 @@ export function useInView<T extends HTMLElement>(threshold = 0.1) {
   const ref = useRef<T>(null)
   const [isInView, setIsInView] = useState(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
 
@@ -23,6 +23,8 @@ export function useInView<T extends HTMLElement>(threshold = 0.1) {
     const markVisible = () => {
       if (!cancelled) setIsInView(true)
     }
+
+    if (isElementInViewport(el)) markVisible()
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -36,7 +38,6 @@ export function useInView<T extends HTMLElement>(threshold = 0.1) {
 
     observer.observe(el)
 
-    // After layout/paint — catches elements already on screen (fixes counters stuck at 0).
     const raf = requestAnimationFrame(() => {
       if (isElementInViewport(el)) markVisible()
     })

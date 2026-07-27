@@ -40,8 +40,9 @@ const features = [
 ]
 
 function CounterCard({ label, target, decimals, suffix }: (typeof counterSpecs)[number]) {
-  const { ref, isInView } = useInView<HTMLDivElement>()
+  const { ref, isInView } = useInView<HTMLDivElement>(0.05)
   const value = useCountUp(target, isInView)
+  const display = isInView ? value.toFixed(decimals) : target.toFixed(decimals)
 
   return (
     <div
@@ -49,7 +50,7 @@ function CounterCard({ label, target, decimals, suffix }: (typeof counterSpecs)[
       className="rounded-2xl border border-white/25 bg-white/15 p-3 text-center backdrop-blur-sm sm:p-4"
     >
       <p className="text-xl font-black leading-none text-flame-amber sm:text-2xl">
-        {value.toFixed(decimals)}
+        {display}
         {suffix}
       </p>
       <p className="font-english mt-1.5 text-[10px] font-semibold uppercase tracking-wide text-white/85 sm:text-xs">

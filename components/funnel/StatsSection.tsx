@@ -60,13 +60,15 @@ function StatCard({
 
   const value = useCountUp(target, ready, 2200)
 
+  const shown = start ? Math.round(value) : target
+
   return (
     <div className="flex min-h-[130px] flex-col items-center justify-center rounded-2xl border border-white/25 bg-white/10 px-1.5 py-4 text-center shadow-lg backdrop-blur-md sm:min-h-[160px] sm:rounded-3xl sm:px-3 sm:py-5">
       <div className="mb-1.5 flex h-7 w-7 items-center justify-center rounded-lg border border-white/20 bg-white/10 sm:mb-2 sm:h-9 sm:w-9 sm:rounded-xl">
         <Icon className="h-3.5 w-3.5 text-white sm:h-5 sm:w-5" strokeWidth={1.75} aria-hidden />
       </div>
       <p className="font-english text-base font-extrabold leading-none text-white sm:text-3xl">
-        {Math.round(value)}
+        {shown}
         {suffix}
       </p>
       <p className="font-english mt-1.5 text-[9px] font-semibold leading-snug text-white/90 sm:mt-2 sm:text-xs">
