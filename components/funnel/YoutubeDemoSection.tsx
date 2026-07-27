@@ -7,11 +7,12 @@ import { useYoutubeInViewPlayer } from '@/hooks/useYoutubeInViewPlayer'
 const YOUTUBE_ID = 'MgbIAa46c9o'
 
 export default function YoutubeDemoSection() {
-  const { sectionRef, iframeRef, togglePause, src, posterUrl, showPoster, onIframeLoad } =
+  const { sectionRef, iframeRef, src, posterUrl, showPoster, onIframeLoad } =
     useYoutubeInViewPlayer({
       youtubeId: YOUTUBE_ID,
       activeId: 'youtube',
       variant: 'landscape',
+      coverWithPoster: false,
     })
 
   return (
@@ -34,7 +35,6 @@ export default function YoutubeDemoSection() {
               iframeRef={iframeRef}
               onIframeLoad={onIframeLoad}
               aspectClass="aspect-video"
-              onToggle={togglePause}
             />
           </div>
         </Reveal>

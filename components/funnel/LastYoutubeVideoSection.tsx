@@ -7,10 +7,11 @@ import { useYoutubeInViewPlayer } from '@/hooks/useYoutubeInViewPlayer'
 const YOUTUBE_ID = 'PJLNLCJHPVg'
 
 export default function LastYoutubeVideoSection() {
-  const { sectionRef, iframeRef, togglePause, src, posterUrl, showPoster, onIframeLoad } =
+  const { sectionRef, iframeRef, src, posterUrl, showPoster, onIframeLoad } =
     useYoutubeInViewPlayer({
       youtubeId: YOUTUBE_ID,
       activeId: 'hero',
+      coverWithPoster: true,
     })
 
   return (
@@ -28,7 +29,6 @@ export default function LastYoutubeVideoSection() {
               aspectClass="aspect-[9/16]"
               iframeClassName="absolute left-0 w-full max-w-none border-0"
               iframeStyle={{ top: '-14%', height: '128%' }}
-              onToggle={togglePause}
             />
           </div>
         </Reveal>
