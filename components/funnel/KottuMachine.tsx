@@ -39,7 +39,7 @@ export default function KottuMachine() {
     <section className="relative bg-transparent px-4 py-8 sm:py-10">
       <div className="relative mx-auto max-w-xl">
         <Reveal>
-          <h2 className="font-english whitespace-nowrap text-center text-base font-extrabold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
+          <h2 className="font-english whitespace-nowrap text-center text-lg font-extrabold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
             Commercial Kottu Cutting Machine
           </h2>
           <p className="mt-3 text-center text-xl font-extrabold text-white/95 sm:text-2xl">
