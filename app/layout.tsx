@@ -1,8 +1,15 @@
 import type { Metadata, Viewport } from 'next'
-import { Poppins } from 'next/font/google'
+import { Montserrat, Poppins } from 'next/font/google'
 import Script from 'next/script'
 import MetaPixelContactTracker from '@/components/MetaPixelContactTracker'
 import './globals.css'
+
+const montserrat = Montserrat({
+  weight: ['700', '800'],
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+})
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -64,7 +71,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${poppins.variable} text-white`}
+        className={`${poppins.variable} ${montserrat.variable} text-white`}
         style={{ backgroundColor: '#0b1f3a', fontFamily: "'Noto Sans Sinhala', sans-serif" }}
       >
         {children}
