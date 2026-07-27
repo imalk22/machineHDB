@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Noto Sans Sinhala"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['var(--font-display)', 'Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['"Noto Sans Sinhala"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         english: ['var(--font-poppins)', 'Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {

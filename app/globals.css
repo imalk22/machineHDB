@@ -67,8 +67,9 @@ body {
 }
 
 .font-english {
-  font-family: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    sans-serif;
+  font-family: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+    'Segoe UI', Roboto, sans-serif;
+  font-synthesis: weight;
 }
 
 .btn-english {
