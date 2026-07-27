@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   setActiveVideo,
   onActiveVideoChange,
-  hasUserInteracted,
   markUserInteracted,
+  onUserInteracted,
   type ActiveVideo,
 } from '@/lib/videoPlayback'
 
@@ -54,16 +54,15 @@ export function useYoutubeInViewPlayer({
   const applyPlay = useCallback(() => {
     if (!wantPlayRef.current) return
     setActiveVideo(activeId)
-    if (hasUserInteracted()) {
-      post('unMute')
-      post('setVolume', [100])
-    } else {
-      post('mute')
-    }
+    post('unMute')
+    post('setVolume', [100])
     post('playVideo')
-    ;[150, 400, 900, 1600, 2800].forEach((ms) => {
+    ;[80, 200, 500, 1000, 1800, 2800].forEach((ms) => {
       window.setTimeout(() => {
-        if (wantPlayRef.current) post('playVideo')
+        if (!wantPlayRef.current) return
+        post('unMute')
+        post('setVolume', [100])
+        post('playVideo')
       }, ms)
     })
   }, [activeId, post])
@@ -85,6 +84,7 @@ export function useYoutubeInViewPlayer({
     if (!section) return
 
     const play = () => {
+      markUserInteracted()
       wantPlayRef.current = true
       ensureIframe(true)
       if (readyRef.current) applyPlay()
@@ -93,8 +93,9 @@ export function useYoutubeInViewPlayer({
     const pause = () => {
       wantPlayRef.current = false
       playingRef.current = false
+      post('mute')
       post('pauseVideo')
-      // Cover again so returning to this section never shows black
+      // Keep iframe mounted — unloading forced a multi-second reload on return
       setShowPoster(true)
     }
 
@@ -121,11 +122,13 @@ export function useYoutubeInViewPlayer({
       // 1 = playing — only safe moment to lift the thumbnail
       if (data.event === 'onStateChange' && data.info === 1) {
         revealVideo()
+        post('unMute')
+        post('setVolume', [100])
       }
     }
     window.addEventListener('message', onMessage)
 
-    // Start loading player well before it enters view
+    // Warm-load player ~2 viewports ahead so it is ready when the user arrives
     const warmObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -133,7 +136,7 @@ export function useYoutubeInViewPlayer({
           warmObserver.disconnect()
         }
       },
-      { rootMargin: '1400px 0px', threshold: 0 }
+      { rootMargin: '2200px 0px', threshold: 0 }
     )
     warmObserver.observe(section)
 
@@ -142,7 +145,7 @@ export function useYoutubeInViewPlayer({
         if (entry.isIntersecting && entry.intersectionRatio >= 0.05) play()
         else pause()
       },
-      { threshold: [0, 0.05, 0.15, 0.3], rootMargin: '120px 0px -2% 0px' }
+      { threshold: [0, 0.05, 0.15, 0.3], rootMargin: '160px 0px -2% 0px' }
     )
     playObserver.observe(section)
 
@@ -150,29 +153,24 @@ export function useYoutubeInViewPlayer({
       if (id !== activeId) pause()
     })
 
-    const unlock = () => {
-      markUserInteracted()
-      if (wantPlayRef.current) {
-        post('unMute')
-        post('setVolume', [100])
-        post('playVideo')
-      }
-    }
-    document.addEventListener('click', unlock, { once: true })
-    document.addEventListener('touchstart', unlock, { once: true })
+    // SoundUnlock / any site tap — unmute only if this section wants to play
+    const stopUnlock = onUserInteracted(() => {
+      if (!wantPlayRef.current) return
+      post('unMute')
+      post('setVolume', [100])
+      post('playVideo')
+    })
 
     const rect = section.getBoundingClientRect()
     const vh = window.innerHeight || document.documentElement.clientHeight
-    if (rect.top < vh + 1400) ensureIframe(false)
-    if (rect.top < vh * 0.95 && rect.bottom > vh * 0.05) play()
+    if (rect.top < vh + 2200) ensureIframe(false)
 
     return () => {
       warmObserver.disconnect()
       playObserver.disconnect()
       stopIfOther()
+      stopUnlock()
       window.removeEventListener('message', onMessage)
-      document.removeEventListener('click', unlock)
-      document.removeEventListener('touchstart', unlock)
     }
   }, [youtubeId, activeId, variant, ensureIframe, applyPlay, post, revealVideo])
 
@@ -188,7 +186,6 @@ export function useYoutubeInViewPlayer({
     }, 300)
 
     // Safety: if postMessage API never fires, still lift poster after a long wait
-    // (better late than stuck forever covering a playing video)
     const safety = window.setTimeout(() => {
       readyRef.current = true
       if (wantPlayRef.current) {
@@ -201,7 +198,31 @@ export function useYoutubeInViewPlayer({
       window.clearInterval(handshake)
       window.clearTimeout(safety)
     }
-  }, [src, applyPlay, revealVideo])
+    // Only re-run when the embed URL mounts — not when play helpers change identity
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [src])
+
+  // After first paint, warm-load as soon as the browser is idle (even before scroll)
+  useEffect(() => {
+    const warm = () => ensureIframe(false)
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number
+      cancelIdleCallback?: (id: number) => void
+    }
+    let idleId: number | undefined
+    let timeoutId: number | undefined
+
+    if (typeof w.requestIdleCallback === 'function') {
+      idleId = w.requestIdleCallback(warm, { timeout: 2500 })
+    } else {
+      timeoutId = window.setTimeout(warm, 1200)
+    }
+
+    return () => {
+      if (idleId !== undefined) w.cancelIdleCallback?.(idleId)
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId)
+    }
+  }, [ensureIframe])
 
   const onIframeLoad = useCallback(() => {
     iframeRef.current?.contentWindow?.postMessage(
@@ -260,6 +281,8 @@ export function youtubeShortEmbedSrc(youtubeId: string, autoplay = false) {
 export function youtubeLandscapeEmbedSrc(youtubeId: string, autoplay = false) {
   const auto = autoplay ? '&autoplay=1' : ''
   return withOrigin(
-    `https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&mute=1&playsinline=1&rel=0&modestbranding=1${auto}`
+    `https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&mute=1&playsinline=1` +
+      `&rel=0&modestbranding=1&controls=0&fs=0&iv_load_policy=3&disablekb=1` +
+      `&loop=1&playlist=${youtubeId}${auto}`
   )
 }

@@ -2,6 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Self-hosted Noto Sans Sinhala — same bold look as live machine-hdb */
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/NotoSansSinhala-400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/NotoSansSinhala-400.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/NotoSansSinhala-700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/NotoSansSinhala-700.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/NotoSansSinhala-800.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Noto Sans Sinhala';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/NotoSansSinhala-800.ttf') format('truetype');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -14,12 +58,12 @@ html {
 }
 
 body {
-  /* Same stack as last days — Noto Sans Sinhala for Unicode Sinhala */
-  font-family: var(--font-noto-sinhala), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+  font-family: 'Noto Sans Sinhala', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     ui-sans-serif, system-ui, sans-serif;
   background-color: #0b1f3a !important;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+  /* Keep Sinhala bold strokes thick */
+  -webkit-font-smoothing: auto;
 }
 
 .font-english {

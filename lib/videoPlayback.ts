@@ -28,6 +28,37 @@ export function onUserInteracted(handler: () => void) {
   return () => window.removeEventListener(INTERACT_EVENT, listener)
 }
 
+/**
+ * Stop all HTML5 video and YouTube iframes — use on fresh load / reload / bfcache restore.
+ */
+export function silenceAllPageMedia() {
+  if (typeof document === 'undefined') return
+  document.querySelectorAll('video').forEach((node) => {
+    const video = node as HTMLVideoElement
+    video.pause()
+    video.muted = true
+    video.defaultMuted = true
+  })
+  document.querySelectorAll('iframe[src*="youtube"]').forEach((node) => {
+    const win = (node as HTMLIFrameElement).contentWindow
+    if (!win) return
+    win.postMessage(JSON.stringify({ event: 'command', func: 'mute', args: [] }), '*')
+    win.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*')
+  })
+}
+
+export function installPageLoadMediaSilence() {
+  if (typeof window === 'undefined') return () => {}
+
+  silenceAllPageMedia()
+  const onPageShow = (e: PageTransitionEvent) => {
+    silenceAllPageMedia()
+    if (e.persisted) silenceAllPageMedia()
+  }
+  window.addEventListener('pageshow', onPageShow)
+  return () => window.removeEventListener('pageshow', onPageShow)
+}
+
 function forceHtml5Loud() {
   document.querySelectorAll('video').forEach((node) => {
     const video = node as HTMLVideoElement
@@ -38,44 +69,15 @@ function forceHtml5Loud() {
   })
 }
 
-/** Tell every YouTube iframe to unmute + full volume. */
-export function forceYoutubeLoud() {
-  document.querySelectorAll('iframe').forEach((iframe) => {
-    const el = iframe as HTMLIFrameElement
-    if (!el.src.includes('youtube.com/embed')) return
-    el.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func: 'unMute', args: [] }),
-      '*'
-    )
-    el.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func: 'setVolume', args: [100] }),
-      '*'
-    )
-    el.contentWindow?.postMessage(
-      JSON.stringify({ event: 'command', func: 'playVideo', args: [] }),
-      '*'
-    )
-  })
-}
-
 /**
  * Unlock audio site-wide. Call from any real user gesture.
  * Browsers block unmuted autoplay until this happens at least once.
+ * YouTube is NOT unmuted here — only the YouTube section does that when in view.
  */
 export function unlockAllSound() {
   markUserInteracted()
   forceHtml5Loud()
-  forceYoutubeLoud()
-
-  // Resume any HTML5 video that is currently in (or near) the viewport
-  document.querySelectorAll('video').forEach((node) => {
-    const video = node as HTMLVideoElement
-    const rect = video.getBoundingClientRect()
-    const vh = window.innerHeight || 0
-    const near = rect.top < vh * 0.95 && rect.bottom > vh * 0.05
-    if (near) void video.play().catch(() => {})
-  })
-
+  // Do not auto-play videos here — sections resume via in-view hooks after a real tap.
   // Wake Web Audio (helps some mobile browsers keep sound allowed)
   try {
     const AC =
@@ -99,6 +101,13 @@ export function unlockAllSound() {
 export function installGlobalSoundUnlock() {
   if (typeof window === 'undefined') return () => {}
 
+  // First scroll / touch counts as engagement so in-view videos can use sound (mobile).
+  const engage = () => markUserInteracted()
+  const engageOpts: AddEventListenerOptions = { capture: true, passive: true, once: true }
+  document.addEventListener('scroll', engage, engageOpts)
+  document.addEventListener('touchstart', engage, engageOpts)
+  document.addEventListener('wheel', engage, engageOpts)
+
   const unlock = () => unlockAllSound()
   const opts: AddEventListenerOptions = { capture: true, passive: true }
 
@@ -110,6 +119,9 @@ export function installGlobalSoundUnlock() {
   document.addEventListener('keydown', unlock, opts)
 
   return () => {
+    document.removeEventListener('scroll', engage, engageOpts)
+    document.removeEventListener('touchstart', engage, engageOpts)
+    document.removeEventListener('wheel', engage, engageOpts)
     document.removeEventListener('pointerdown', unlock, opts)
     document.removeEventListener('touchstart', unlock, opts)
     document.removeEventListener('touchend', unlock, opts)

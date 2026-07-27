@@ -5,7 +5,6 @@ import {
   setActiveVideo,
   onActiveVideoChange,
   onUserInteracted,
-  hasUserInteracted,
   markUserInteracted,
   type ActiveVideo,
 } from '@/lib/videoPlayback'
@@ -18,8 +17,8 @@ function loud(video: HTMLVideoElement) {
 }
 
 /**
- * Always try autoplay WITH sound first.
- * If the browser blocks it, play muted then flip to loud after the first tap.
+ * Prefer autoplay with sound when a section scrolls into view.
+ * Falls back to muted play, then unmutes and retries.
  */
 export async function playVideoLoud(video: HTMLVideoElement) {
   video.playsInline = true
@@ -27,40 +26,27 @@ export async function playVideoLoud(video: HTMLVideoElement) {
   video.setAttribute('webkit-playsinline', '')
   video.volume = 1
 
-  // 1) Prefer unmuted autoplay (works when browser allows it)
   loud(video)
   try {
     await video.play()
-    if (!video.muted) {
-      markUserInteracted()
-      return
-    }
+    if (!video.muted) return
   } catch {
     /* NotAllowedError — fall through */
   }
 
-  // 2) After a real tap, force loud again
-  if (hasUserInteracted()) {
-    loud(video)
-    try {
-      await video.play()
-      return
-    } catch {
-      /* fall through to muted */
-    }
-  }
-
-  // 3) Muted autoplay so motion always starts; sound unlocks on next tap
   video.muted = true
+  video.defaultMuted = true
   try {
     await video.play()
   } catch {
     /* ignore */
   }
 
-  if (hasUserInteracted()) {
-    loud(video)
-    await video.play().catch(() => {})
+  loud(video)
+  try {
+    await video.play()
+  } catch {
+    /* ignore */
   }
 }
 
@@ -77,6 +63,9 @@ export function useInViewLoudVideo(activeId: ActiveVideo) {
 
     video.playsInline = true
     video.volume = 1
+    video.pause()
+    video.muted = true
+    video.defaultMuted = true
 
     const clearTimers = () => {
       timersRef.current.forEach((id) => window.clearTimeout(id))
@@ -84,6 +73,7 @@ export function useInViewLoudVideo(activeId: ActiveVideo) {
     }
 
     const play = () => {
+      markUserInteracted()
       setActiveVideo(activeId)
       clearTimers()
       const attempt = () => {
@@ -123,18 +113,9 @@ export function useInViewLoudVideo(activeId: ActiveVideo) {
 
     const keepLoud = window.setInterval(() => {
       if (!inViewRef.current) return
-      if (hasUserInteracted()) {
-        if (video.muted || video.volume < 1) loud(video)
-      }
+      if (video.muted || video.volume < 1) loud(video)
       if (video.paused) void playVideoLoud(video)
     }, 400)
-
-    const rect = section.getBoundingClientRect()
-    const vh = window.innerHeight || document.documentElement.clientHeight
-    if (rect.top < vh * 0.95 && rect.bottom > vh * 0.05) {
-      inViewRef.current = true
-      play()
-    }
 
     return () => {
       clearTimers()

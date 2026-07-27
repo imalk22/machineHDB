@@ -76,6 +76,7 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
   const playWithSound = () => {
     const video = videoRef.current
     if (!video || !inViewRef.current) return
+    markUserInteracted()
     setActiveVideo('hero')
     clearTimers()
     const attempt = () => {
@@ -132,6 +133,10 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     const section = sectionRef.current
     const video = videoRef.current
     if (!isOpen || !section || !video) return
+
+    video.pause()
+    video.muted = true
+    video.defaultMuted = true
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -224,9 +229,9 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             ref={videoRef}
             className="w-full h-full object-cover"
             src="/videos/vid.mp4"
-            autoPlay={autoPlay}
+            poster="/images/posters/vid-poster.jpg"
             loop
-            preload="auto"
+            preload="metadata"
             playsInline
             onCanPlay={() => setIsVideoReady(true)}
             onLoadedData={() => setIsVideoReady(true)}

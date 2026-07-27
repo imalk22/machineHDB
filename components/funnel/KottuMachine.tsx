@@ -42,7 +42,7 @@ export default function KottuMachine() {
           <h2 className="font-english whitespace-nowrap text-center text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
             Commercial Kottu Cutting Machine
           </h2>
-          <p className="mt-3 text-center text-xl font-bold text-white/90 sm:text-2xl">
+          <p className="mt-3 text-center text-xl font-extrabold text-white/95 sm:text-2xl">
             කොත්තු කැපිමේ යන්ත්‍රය
           </p>
         </Reveal>
@@ -50,19 +50,26 @@ export default function KottuMachine() {
         <Reveal delayMs={100} className="mt-6">
           <article className="relative overflow-hidden rounded-2xl">
             <div className="relative mx-auto h-[300px] w-full sm:h-[360px]">
-              <Image
-                src={productImages[active]}
-                alt={`Commercial Kottu Cutting Machine ${active + 1}`}
-                fill
-                className="object-contain p-2"
-                sizes="(max-width: 640px) 100vw, 576px"
-                priority={active === 0}
-              />
+              {productImages.map((src, index) => (
+                <Image
+                  key={src}
+                  src={src}
+                  alt={`Commercial Kottu Cutting Machine ${index + 1}`}
+                  fill
+                  className={`object-contain p-2 transition-opacity duration-200 ${
+                    active === index ? 'opacity-100' : 'pointer-events-none opacity-0'
+                  }`}
+                  sizes="(max-width: 640px) 100vw, 576px"
+                  priority={index === 0}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                />
+              ))}
               <button
                 type="button"
                 onClick={prev}
                 aria-label="Previous image"
-                className="absolute left-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
+                className="absolute left-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
               >
                 <ChevronLeft className="h-5 w-5" aria-hidden />
               </button>
@@ -70,7 +77,7 @@ export default function KottuMachine() {
                 type="button"
                 onClick={next}
                 aria-label="Next image"
-                className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
+                className="absolute right-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
               >
                 <ChevronRight className="h-5 w-5" aria-hidden />
               </button>
@@ -93,7 +100,7 @@ export default function KottuMachine() {
                     fill
                     className="object-cover"
                     sizes="56px"
-                    loading="lazy"
+                    loading={index === 0 ? 'eager' : 'lazy'}
                   />
                 </button>
               ))}
@@ -121,9 +128,11 @@ export default function KottuMachine() {
                   <div className="px-4 pb-3 pt-4">
                     <div className="mb-1.5 flex items-center justify-between">
                       <p className="font-english text-xs font-bold text-blue-300">Selling Price</p>
-                      <p className="text-base font-bold text-white/50 line-through sm:text-lg">රු. 99,500</p>
+                      <p className="text-base font-extrabold text-white/55 line-through sm:text-lg">
+                        රු. 99,500
+                      </p>
                     </div>
-                    <p className="mb-2.5 text-3xl font-extrabold leading-none tracking-tight text-white sm:text-4xl">
+                    <p className="mb-2.5 text-3xl font-black leading-none tracking-tight text-white sm:text-4xl">
                       රු. 89,550
                     </p>
                     <div className="flex items-center gap-2 rounded-lg border border-whatsapp/40 bg-whatsapp/15 px-3 py-2">
@@ -140,10 +149,10 @@ export default function KottuMachine() {
                         />
                       </svg>
                       <div>
-                        <p className="text-base font-extrabold leading-none tracking-tight text-whatsapp">
+                        <p className="text-base font-black leading-none tracking-tight text-whatsapp">
                           රු. 9,950 Saved!
                         </p>
-                        <p className="mt-0.5 text-[11px] font-bold text-whatsapp/70">
+                        <p className="mt-0.5 text-[11px] font-extrabold text-whatsapp/80">
                           Last Price රු. 89,550
                         </p>
                       </div>
@@ -152,7 +161,7 @@ export default function KottuMachine() {
                 </div>
               </div>
 
-              <p className="mt-4 text-center text-sm font-semibold leading-relaxed text-white/90 sm:text-[15px]">
+              <p className="mt-4 text-center text-sm font-bold leading-relaxed text-white/90 sm:text-[15px]">
                 ඔයාගේ Restaurant එකට Catering service එකට සහ hotel එකට ගැලපෙන අත්‍යවශ්‍ය
                 machine එකක් තමයි Kottu Cutting Machine එක - මේ Machine එකෙන් වේගවත්ව සහ ඉක්මනට කොත්තු රොටී
                 කපගන්න හැකියාව තියෙනවා වගේම ඔයගේ Business එකත් බලන් ඉද්දිම Grow වෙනවා

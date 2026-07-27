@@ -1,17 +1,7 @@
 import type { Metadata, Viewport } from 'next'
-import { Noto_Sans_Sinhala } from 'next/font/google'
 import Script from 'next/script'
 import MetaPixelContactTracker from '@/components/MetaPixelContactTracker'
 import './globals.css'
-
-// Same font as https://hdbeng.netlify.app/ — normal Unicode Sinhala (no FM conversion)
-const notoSansSinhala = Noto_Sans_Sinhala({
-  subsets: ['sinhala'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-noto-sinhala',
-  display: 'swap',
-  preload: true,
-})
 
 const GA_ID = 'G-2YVGT3DXXP'
 const META_PIXEL_ID = '2918076888326024'
@@ -49,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="si" className={`${notoSansSinhala.variable} ${notoSansSinhala.className}`}>
+    <html lang="si">
       <head>
         <meta charSet="utf-8" />
         <link rel="preconnect" href="https://www.youtube.com" />
@@ -58,7 +48,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
       </head>
-      <body className="font-sans text-white antialiased" style={{ backgroundColor: '#0b1f3a' }}>
+      <body className="text-white" style={{ backgroundColor: '#0b1f3a', fontFamily: "'Noto Sans Sinhala', sans-serif" }}>
         {children}
         <MetaPixelContactTracker />
         <Script

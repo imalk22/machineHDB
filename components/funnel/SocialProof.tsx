@@ -52,10 +52,10 @@ export default function SocialProof() {
             <Reveal key={t.name} delayMs={i * 100}>
               <blockquote className="rounded-xl border border-white/15 bg-white/10 px-3.5 py-3 backdrop-blur-sm">
                 <Stars count={5} />
-                <p className="mt-2 text-sm font-semibold leading-snug text-white/90">&ldquo;{t.quote}&rdquo;</p>
+                <p className="mt-2 text-sm font-bold leading-snug text-white/95">&ldquo;{t.quote}&rdquo;</p>
                 <footer className="mt-2.5 border-t border-white/15 pt-2">
                   <p className="text-sm font-extrabold text-white">{t.name}</p>
-                  <p className="text-xs font-medium text-white/60">{t.location}</p>
+                  <p className="text-xs font-semibold text-white/70">{t.location}</p>
                 </footer>
               </blockquote>
             </Reveal>

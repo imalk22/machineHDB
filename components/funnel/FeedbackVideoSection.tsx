@@ -28,10 +28,10 @@ export default function FeedbackVideoSection() {
                 ref={videoRef}
                 className="absolute inset-0 h-full w-full object-cover"
                 src={VIDEO_SRC}
+                poster="/images/posters/feedback-poster.jpg"
                 playsInline
                 loop
-                preload="auto"
-                autoPlay
+                preload="metadata"
                 aria-label="Customer feedback video"
               />
             </div>

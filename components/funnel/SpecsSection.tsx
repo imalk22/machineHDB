@@ -101,7 +101,7 @@ export default function SpecsSection() {
             <ShieldCheck className="h-6 w-6" aria-hidden />
           </div>
           <div>
-            <p className="text-sm font-bold text-white">යන්ත්‍රයේ බඳ සඳහා වගකීම</p>
+            <p className="text-sm font-extrabold text-white">යන්ත්‍රයේ බඳ සඳහා වගකීම</p>
             <p className="font-english text-xs text-white/60">
               Machine Warranty (Parts &amp; Service)
             </p>
@@ -116,7 +116,7 @@ export default function SpecsSection() {
                   <Check className="h-4 w-4 text-white" strokeWidth={3} aria-hidden />
                 </div>
                 <div>
-                  <p className="text-sm font-bold leading-snug text-white">{feature.si}</p>
+                  <p className="text-sm font-extrabold leading-snug text-white">{feature.si}</p>
                   <p className="font-english mt-0.5 text-xs leading-snug text-white/55">
                     {feature.en}
                   </p>
