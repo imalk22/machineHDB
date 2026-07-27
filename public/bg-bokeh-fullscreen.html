@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preview — Soft bokeh lights</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      min-height: 100dvh;
+      font-family: Montserrat, system-ui, -apple-system, Segoe UI, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      background: #0c1222;
+    }
+
+    /* Full-screen soft bokeh (#10) */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: #0c1222;
+      pointer-events: none;
+    }
+    .bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle 90px at 18% 22%, rgba(96,165,250,.42), transparent 70%),
+        radial-gradient(circle 140px at 78% 18%, rgba(129,140,248,.36), transparent 70%),
+        radial-gradient(circle 80px at 62% 68%, rgba(56,189,248,.34), transparent 70%),
+        radial-gradient(circle 120px at 22% 78%, rgba(99,102,241,.3), transparent 70%),
+        radial-gradient(circle 70px at 88% 72%, rgba(147,197,253,.38), transparent 70%),
+        radial-gradient(circle 100px at 48% 40%, rgba(59,130,246,.22), transparent 70%),
+        radial-gradient(circle 55px at 35% 55%, rgba(165,180,252,.28), transparent 70%);
+      filter: blur(10px);
+    }
+    .bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle 45px at 70% 45%, rgba(191,219,254,.25), transparent 70%),
+        radial-gradient(circle 35px at 40% 15%, rgba(125,211,252,.22), transparent 70%);
+      filter: blur(8px);
+      opacity: .9;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px 20px 100px;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 6vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      text-shadow: 0 4px 24px rgba(0,0,0,.55);
+      max-width: 16ch;
+    }
+    p {
+      margin-top: 14px;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.82);
+      text-shadow: 0 2px 12px rgba(0,0,0,.5);
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,.55);
+    }
+    .bar {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 2;
+      padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+      background: rgba(8,12,24,.75);
+      border-top: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,.85);
+    }
+    .bar a {
+      color: #93c5fd;
+      font-weight: 700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="content">
+    <h1>Commercial Kottu Cutting Machine</h1>
+    <p>#10 Soft bokeh lights — full screen</p>
+    <p class="note">If you like this, reply “use 10” in chat</p>
+  </div>
+  <div class="bar">
+    Preview only · <a href="/bg-gallery.html">Back to gallery</a>
+  </div>
+</body>
+</html>
