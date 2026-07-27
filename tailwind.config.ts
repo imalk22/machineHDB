@@ -9,6 +9,7 @@ export default {
       fontFamily: {
         sans: ['"Noto Sans Sinhala"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         display: ['"Noto Sans Sinhala"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        english: ['var(--font-poppins)', 'Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         navy: "#0b1f3a",

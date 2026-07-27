@@ -1,7 +1,15 @@
 import type { Metadata, Viewport } from 'next'
+import { Poppins } from 'next/font/google'
 import Script from 'next/script'
 import MetaPixelContactTracker from '@/components/MetaPixelContactTracker'
 import './globals.css'
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-poppins',
+  display: 'swap',
+})
 
 const GA_ID = 'G-2YVGT3DXXP'
 const META_PIXEL_ID = '2918076888326024'
@@ -47,8 +55,18 @@ export default function RootLayout({
         <link rel="preconnect" href="https://i.ytimg.com" />
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://i.ytimg.com" />
+        <link
+          rel="preload"
+          href="/fonts/NotoSansSinhala-700.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
       </head>
-      <body className="text-white" style={{ backgroundColor: '#0b1f3a', fontFamily: "'Noto Sans Sinhala', sans-serif" }}>
+      <body
+        className={`${poppins.variable} text-white`}
+        style={{ backgroundColor: '#0b1f3a', fontFamily: "'Noto Sans Sinhala', sans-serif" }}
+      >
         {children}
         <MetaPixelContactTracker />
         <Script
