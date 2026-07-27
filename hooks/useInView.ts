@@ -24,15 +24,6 @@ export function useInView<T extends HTMLElement>(threshold = 0.1) {
       if (!cancelled) setIsInView(true)
     }
 
-    // Fallback: IntersectionObserver can miss already-visible elements on
-    // mount / React Strict Mode remount, which left counters stuck at 0.
-    if (isElementInViewport(el)) {
-      markVisible()
-      return () => {
-        cancelled = true
-      }
-    }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -44,8 +35,15 @@ export function useInView<T extends HTMLElement>(threshold = 0.1) {
     )
 
     observer.observe(el)
+
+    // After layout/paint — catches elements already on screen (fixes counters stuck at 0).
+    const raf = requestAnimationFrame(() => {
+      if (isElementInViewport(el)) markVisible()
+    })
+
     return () => {
       cancelled = true
+      cancelAnimationFrame(raf)
       observer.disconnect()
     }
   }, [threshold])

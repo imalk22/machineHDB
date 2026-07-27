@@ -160,8 +160,6 @@ export function useYoutubeInViewPlayer({
       applyPlay()
     }, 500)
 
-    ensureIframe()
-
     const rect = section.getBoundingClientRect()
     const vh = window.innerHeight || document.documentElement.clientHeight
     if (rect.top < vh * 0.92 && rect.bottom > vh * 0.05) play()

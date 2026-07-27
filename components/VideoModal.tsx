@@ -113,7 +113,12 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
     video.addEventListener('playing', markReady)
     video.addEventListener('error', markError)
 
+    const readyPoll = window.setInterval(() => {
+      if (video.readyState >= 2) markReady()
+    }, 400)
+
     return () => {
+      window.clearInterval(readyPoll)
       video.removeEventListener('loadeddata', markReady)
       video.removeEventListener('canplay', markReady)
       video.removeEventListener('playing', markReady)
@@ -231,7 +236,7 @@ export default function VideoModal({ isOpen, onClose, autoPlay = false }: VideoM
             src="/videos/vid.mp4"
             poster="/images/posters/vid-poster.jpg"
             loop
-            preload="metadata"
+            preload="auto"
             playsInline
             onCanPlay={() => setIsVideoReady(true)}
             onLoadedData={() => setIsVideoReady(true)}
