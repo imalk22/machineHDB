@@ -69,7 +69,12 @@ export function useYoutubeInViewPlayer({
 
   const ensureIframe = useCallback(
     (autoplay: boolean) => {
-      setSrc((current) => current || embedSrc(autoplay))
+      const next = embedSrc(autoplay)
+      setSrc((current) => {
+        if (!autoplay) return current || next
+        if (!current || !current.includes('autoplay=1')) return next
+        return current
+      })
     },
     [embedSrc]
   )
@@ -79,6 +84,22 @@ export function useYoutubeInViewPlayer({
     setShowPoster(false)
   }, [])
 
+  const revealTimerRef = useRef<number | null>(null)
+
+  const clearRevealTimer = useCallback(() => {
+    if (revealTimerRef.current !== null) {
+      window.clearTimeout(revealTimerRef.current)
+      revealTimerRef.current = null
+    }
+  }, [])
+
+  const scheduleRevealFallback = useCallback(() => {
+    clearRevealTimer()
+    revealTimerRef.current = window.setTimeout(() => {
+      if (wantPlayRef.current) revealVideo()
+    }, 2200)
+  }, [clearRevealTimer, revealVideo])
+
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
@@ -87,12 +108,14 @@ export function useYoutubeInViewPlayer({
       markUserInteracted()
       wantPlayRef.current = true
       ensureIframe(true)
+      scheduleRevealFallback()
       if (readyRef.current) applyPlay()
     }
 
     const pause = () => {
       wantPlayRef.current = false
       playingRef.current = false
+      clearRevealTimer()
       post('mute')
       post('pauseVideo')
       // Keep iframe mounted — unloading forced a multi-second reload on return
@@ -121,6 +144,7 @@ export function useYoutubeInViewPlayer({
 
       // 1 = playing — only safe moment to lift the thumbnail
       if (data.event === 'onStateChange' && data.info === 1) {
+        clearRevealTimer()
         revealVideo()
         post('unMute')
         post('setVolume', [100])
@@ -166,13 +190,24 @@ export function useYoutubeInViewPlayer({
     if (rect.top < vh + 2200) ensureIframe(false)
 
     return () => {
+      clearRevealTimer()
       warmObserver.disconnect()
       playObserver.disconnect()
       stopIfOther()
       stopUnlock()
       window.removeEventListener('message', onMessage)
     }
-  }, [youtubeId, activeId, variant, ensureIframe, applyPlay, post, revealVideo])
+  }, [
+    youtubeId,
+    activeId,
+    variant,
+    ensureIframe,
+    applyPlay,
+    post,
+    revealVideo,
+    scheduleRevealFallback,
+    clearRevealTimer,
+  ])
 
   useEffect(() => {
     if (!src) return
@@ -192,7 +227,7 @@ export function useYoutubeInViewPlayer({
         applyPlay()
         revealVideo()
       }
-    }, 6000)
+    }, 3500)
 
     return () => {
       window.clearInterval(handshake)
@@ -229,9 +264,11 @@ export function useYoutubeInViewPlayer({
       '{"event":"listening","id":1,"channel":"widget"}',
       '*'
     )
-    if (wantPlayRef.current) applyPlay()
-    // Keep poster up — load ≠ first video frame
-  }, [applyPlay])
+    if (wantPlayRef.current) {
+      applyPlay()
+      scheduleRevealFallback()
+    }
+  }, [applyPlay, scheduleRevealFallback])
 
   const togglePause = () => {
     markUserInteracted()
@@ -251,6 +288,7 @@ export function useYoutubeInViewPlayer({
     } else {
       wantPlayRef.current = true
       setActiveVideo(activeId)
+      scheduleRevealFallback()
       applyPlay()
     }
   }
